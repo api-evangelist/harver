@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  version: 1.37.0
+  title: Harver Public accounts webhook API
+  description: "Public API of the Harver Platform available only for the Customers of Harver. <br>\n# Quick Start\n## How to access our environments\nWe provide the API access keys and Account IDs for each standard environment. We suggest using our TEST (harver-test.com) environment during the development phase.\n\nAvailable Harver environments for clients:\n- Test: `https://api.harver-test.com`\n- Production: `https://api.harver.com`\n\n## Authentication\nHarver Public API uses OAuth2 authentication. Once you have obtained an access token (valid for 1 hour) you can use it in the Authentication Header as a “Bearer” token for all following requests.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/oauth/token`\n\n**Note:** <br>\nin TEST env, POST https://api.harver-test.com/oauth/token\n\n**Content-Type:** <br>\napplication/x-www-form-urlencoded\n\n**Body:**\n- grant_type → client_credentials\n- client_id → Provided by Harver\n- client_secret → Provided by Harver\n\nAfter a successful request, the response will contain the “access-token“.\n\n**Example**\n```\ncurl --location --request POST 'https://api.harver-test.com/oauth/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={your_client_id}' \\\n--data-urlencode 'client_secret={your_client_secret}'\n```\n**[detailed documentation](https://api.harver.com/docs#tag/oauth)**\n\n\n## Rate - Limiting\n\nHarver API is guarded by rate-limiting. When the allocated rate-limit is exceeded, the API returns HTTP status code 429. (Too many requests).\n\nIn the Production and Testing environments, the default limits will be 450 and 300 requests per minute, respectively. There are two new rate-limiting headers added to the responses as below.\n\n- **Ratelimit-Limit** – The request limit for the time period\n- **Ratelimit-Reset** - The time remaining in the current window, specified in seconds\n\n## Correlation ID\n\nThe responses now include a new header called `X-Correlation-Id`. When submitting a support request, please include this ID. \n\n## How to create a candidate with an application\nSubmit candidates to Harver in order to invite them to complete the Harver Journey.\n\nHarver can invite the candidate by sending an email to the candidate with a magic link to start the Harver journey\n\nYou can also redirect candidates directly to the magic link from the endpoint’s response. The candidate is then immediately logged into Harver.\n\nThe attributes allow you to pass your custom list of key-value pairs. You can use this to place for example your IDs like “candidate_id“, “requisition_id”, “source” etc to help you link and sync Harver to your system.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications`\n\n**Header:** <br>\nAuthorization: Bearer {access_token}\n\n**Body:**\n```JSON\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"key1\": \"value1\", //Optional key-value pairs\n      \"key2\": \"value2\", //You can retrieve them with the \"ats\" include\n      \"key3\": \"value3\" //with the GET Application request\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"type\": \"candidates\",\n          \"attributes\": {\n            \"emailAddress\": \"candidate@gmail.com\", //Mandatory\n            \"firstName\": \"CandidateFirstName\",  //Mandatory\n            \"lastName\": \"CandidateLastName\" //Mandatory\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n***Response:***\nThe response includes the unique Application ID and a Magic-link for the Candidate.\npayload here\n```\n{\n    \"data\": {\n        \"magicLink\": \"https://my.harver.com/app/landing/{harver_vacancy_id}/magic-link/{unique_code}\",\n        \"applicationId\": \"{harver_application_id}\"\n    }\n}\n```\n\nRepeating this request with the same email address will return the same Application ID with renewed Magic-Link.\n\nIf your account is set to “Magic-link” based authentication for candidates, you can send this link to your candidates or use it to redirect your candidate to Harver. The Magic-link is valid for 1 hour. A ”Magic Link” is kind of an authenticated URL, which you send to the candidate. This helps them to log in to Harver with just one click of the link without entering username & password. It removes all the friction points that might cause the user to drop out of the application process.\n\n**[detailed documentation](https://api.harver.com/docs#tag/candidateApplications)**\n\n***Return_url parameter***\n\nA special attribute can be used when creating a candidate: return_url. That url will be used to redirect the candidate back when they complete the Harver assessment. This way it is possible to add dynamic attributes to that url.\n\n***Example:***\n```\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"return_url\": \"https:/my-ats.com/welcomeback?candidate_id=12345\"\n    },\n  ...\n}\n```\n## Get all information of an application\nTo retrieve an application's relationship data (such as a PDF report, scores etc.), you can make a basic GET applications/{applicationId}, while also providing the include parameter. This include parameter represents a list of comma-separated includes.\n\nEndpoint: <br>\n`GET https://api.harver.com/api/v1.0/applications/{applicationId}`\n\nHeader: <br>\n`Authorization: Bearer {access_token}`\n\nBasic response\n\nThis part is always available, the rest depends on included modules\n```\n\"type\": \"applications\",\n\"id\": \"{harver_application_id}\",\n\"attributes\": {\n    \"appliedAt\": 1630335533,    // timestamp registration\n    \"completedAt\": 1630336749,  // timestamp completed (when completed)\n    \"status\": \"new\",            // status \"new\" means completed Harver assessment, and \"new\" for recruitment\n    \"progress\": {               // Number of modules (incl video & content pages)\n        \"all\": 19,\n        \"completed\": 19\n    },\n    \"matchingScore\": 69,        // Overall Matching Score\n    \"language\": \"ENG\",\n    \"matchingProfile\": {        // Filled when Matching Profile are used in the account\n        \"bracketId\": \"great\",\n        \"label\": \"Green\"\n    }\n},\n\"relationships\": {\n    \"candidate\": {\n        \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"{harver_application_id}\",\n            \"email\": \"{email}\",\n            \"attributes\": {\n                \"firstName\": \"{firstname}\",\n                \"lastName\": \"{lastname}\",\n                \"email\": \"{email}\"\n            }\n        }\n    },\n```\n### Get Application ‘include’ modules\n- `personal-info` & `additional-info` → Candidate personal info and additional questions\n- `ats` → ATS Parameters. These can be your id’s, source parameters, e.g. like a `candidate_id`, `reqId`, `utm_source`\n\n  -- When the candidate is registered using the API: these are the ones that are sent as key-value attributes in creating the candidates\n  -- When the candidate registers directly in Harver: these are the url parameters\n\nExample:\n```\n\"included\": [\n    {\n        \"type\": \"ats-parameters\",\n        \"attributes\": {\n            \"candidate_id\": \"{ats_candidate_id}\",\n            \"job_code\": \"{ats_job_id}\",\n            \"request_id\": \"{ats_request_id}\",\n            \"return_url\": \"https://...\",   // url to return the candidate to when completed Harver\n        }\n    }\n]\n```\n- `report` → A link to:\n  - Harver PDF report. Generated link that will expire in 15 minutes.\n  - Fact Sheet (1 page report). Generated link that will expire in 15 minutes.\n  - Candidate Detail Page. You’ll need to have a Harver account, or SSO enabled, to access the Candidate Detail Page. Will not expire.\n- `matching-results` → detailed scores on the modules\n- `matching-indicators` → detailed info on matching indicators (KMI’s) when configured in the account\n\nExample url: https://api.harver.com/api/v1.0/applications/{application_id}?include=report,cover-letter,resume,matching-results,personal-info,additional-info,ats,matching-indicators\n\n**Scoring & report information**\n- **Overall Matching score:**\n  - Module: always available\n  - Field: `matchingScore`\n  - This is a numerical 0 - 100 score\n- **Score label or Band**\n  - Module: always available if Matching Profiles are configured in Harver Platform.\n  - Field: `\"matchingProfile\"` → `label`.\n  - This is a label or band that can be configured in the Harver Platform based on the score. Typical examples: “Great Fit” / “Good Fit” / “Bad Fit”, “Passed” / “Failed”, “Red” / “Green”\n- **Module scores**\n  - Module: `matching-indicators`\n  - There is a `\"Included\"` → `\"type\": \"matching-indicators\"` for each matching indicator\n- **PDF Report, Factsheet and Candidate result page**\n  - Module: `report`\n  - A direct link to the Candidate’s PDF report and Factsheet.\n  - Note: these links are only available for 15 minutes after requested!\n  - The link to the Candidate detail page is a link to Harver. For this an account at Harver is necessary or SSO needs to be enabled. This link does not expire.\n\n**[detailed documentation](https://api.harver.com/docs#tag/applications/paths/~1applications~1%7BapplicationId%7D/get)**\n\n## Get all candidates and their applications in a vacancy (using the filters)\nTo retrieve a list of the candidates and their applications in a vacancy.\n\nEach candidate has a status. Main statuses:\n- in-progress: Registered, but hasn't completed the application process yet.\n- **new**: Application process completed. It is recommended to filter for this status\n- hired: candidate is hired\n- rejected: candidate is rejected\n\n**Endpoint:** <br>\n`GET https://api.harver.com/api/v1.0/vacancies/{vacancyId}/candidates`\n\n**Header:** <br>\n`Authorization: Bearer {access_token}`\n\n**Useful filter params:**\n\n- filter[status]=new\n- filter[status-updated-at][since]={epoch_timestamp}\n\nYou can combine params like this:\n?filter[status]=new**&**filter[status-updated-at][since]=1582211393\n\nAfter a successful request, the response body will contain the list of (new) Candidates in the Vacancy. Each candidate has an application listed in the “relationships”, this can be used to request the Application Results.\n\nIf you need to periodically query newly finished candidates, we suggest using the “[status-updated-at][since]” filter with the Epoch timestamp of the previous query.\n\nList of possible filters:\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n- `filter[skip_aggregration]`\n\n**[detailed documentation](https://api.harver.com/docs#tag/vacancies/paths/~1vacancies~1%7BvacancyId%7D~1candidates/get)**\n\n## Webhooks from Harver to an ATS\n\nWebhooks allow you to build or set up integrations which subscribe to certain events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured endpoint. The Harver integrations team can configure the webhooks for you.\n\nAvailable events:\n\n- ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n- PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n- AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n- CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n\nWe support NoAuth and Basic Auth (username & password) authentication.\n\nUse the Harver Application Id to get all the details of the application\n\n**[detailed documentation](https://api.harver.com/docs#tag/webhook)**\n# Definitions\n- **Account** - An Account is what holds all of the company specific information within the platform where users of the account can manage settings, Vacancies and Flows.\n- **Vacancy** - Vacancy represents an open position within a company. The Vacancy is where specific information is collected which includes the candidates who wish to apply to that position and their personal information. A Vacancy contains specific information regarding the position for example the location and hours per week the candidate will be expected to work. A vacancy always must have a flow connected to it.\n- **Flow** - A flow is a set of assessment modules and content (videos, static texts), created by an Admin in the system. A Flow must be connected to one or multiple Vacancies.\n- **Modules or Flow modules** - Modules are the separate components used to build a Flow. For instance, a form for the candidate to fill in his/her personal information, a personality questionnaire, multitasking test, etc.\n- **Matching score** - The matching score indicates the extent to which the assessment results of a candidate fit the Vacancy requirements/benchmark. The matching score is calculated based on the combination of results of the different modules that are part of the Flow.\n- **Candidate** - A Candidate represents a person who applied to one or multiple Vacancies.\n- **Application** - A Candidate can apply to multiple Vacancies within an Account. Once a candidate applies to a Vacancy the Application is created.\n- **Webhooks** - Webhooks allow you to build or set up integrations which subscribe to events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured URL.\n"
+  contact:
+    name: Harver Support Team
+    email: support@harver.com
+    url: https://support.harver.com
+servers:
+- url: https://api.harver.com/api/v1.0/
+  description: Production Server
+tags:
+- name: webhook
+paths:
+  /webhookPath:
+    servers:
+    - url: https://baseURL.com/
+      description: Given endpoint
+    post:
+      summary: Trigger webhook for the given client URL
+      description: "Harver dev team can configure the webhooks for you\n\n  _Available events_\n\n  - ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n  - PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n  - AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n  - CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n"
+      tags:
+      - webhook
+      callbacks:
+        harverEvents:
+          /{webhookPath}:
+            post:
+              summary: Triggered webhook body
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - triggeredAt
+                      - event
+                      - data
+                      properties:
+                        triggeredAt:
+                          type: number
+                          example: 123238983298
+                        event:
+                          type: string
+                          example: ApplicationStarted
+                          enum:
+                          - ApplicationStarted
+                          - PersonalInfoWasCreated
+                          - AdditionalInfoWasUpdated
+                          - CandidateStatusNew
+                        data:
+                          properties:
+                            type:
+                              type: string
+                              example: applications
+                            id:
+                              type: string
+                              example: 60dedb8d4bb3ca0009ff9dcd
+                            attributes:
+                              properties:
+                                status:
+                                  type: string
+                                  example: in-progress
+                                  enum:
+                                  - in-progress
+                                  - new
+                        relationships:
+                          properties:
+                            account:
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: account
+                                    id:
+                                      type: string
+                                      example: 60ca01c2d70c100006122053
+              responses:
+                '200':
+                  description: Response from the client
+      responses:
+        '200':
+          description: Response from the client

@@ -1,0 +1,2688 @@
+openapi: 3.0.0
+info:
+  version: 1.37.0
+  title: Harver Public accounts applications API
+  description: "Public API of the Harver Platform available only for the Customers of Harver. <br>\n# Quick Start\n## How to access our environments\nWe provide the API access keys and Account IDs for each standard environment. We suggest using our TEST (harver-test.com) environment during the development phase.\n\nAvailable Harver environments for clients:\n- Test: `https://api.harver-test.com`\n- Production: `https://api.harver.com`\n\n## Authentication\nHarver Public API uses OAuth2 authentication. Once you have obtained an access token (valid for 1 hour) you can use it in the Authentication Header as a “Bearer” token for all following requests.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/oauth/token`\n\n**Note:** <br>\nin TEST env, POST https://api.harver-test.com/oauth/token\n\n**Content-Type:** <br>\napplication/x-www-form-urlencoded\n\n**Body:**\n- grant_type → client_credentials\n- client_id → Provided by Harver\n- client_secret → Provided by Harver\n\nAfter a successful request, the response will contain the “access-token“.\n\n**Example**\n```\ncurl --location --request POST 'https://api.harver-test.com/oauth/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={your_client_id}' \\\n--data-urlencode 'client_secret={your_client_secret}'\n```\n**[detailed documentation](https://api.harver.com/docs#tag/oauth)**\n\n\n## Rate - Limiting\n\nHarver API is guarded by rate-limiting. When the allocated rate-limit is exceeded, the API returns HTTP status code 429. (Too many requests).\n\nIn the Production and Testing environments, the default limits will be 450 and 300 requests per minute, respectively. There are two new rate-limiting headers added to the responses as below.\n\n- **Ratelimit-Limit** – The request limit for the time period\n- **Ratelimit-Reset** - The time remaining in the current window, specified in seconds\n\n## Correlation ID\n\nThe responses now include a new header called `X-Correlation-Id`. When submitting a support request, please include this ID. \n\n## How to create a candidate with an application\nSubmit candidates to Harver in order to invite them to complete the Harver Journey.\n\nHarver can invite the candidate by sending an email to the candidate with a magic link to start the Harver journey\n\nYou can also redirect candidates directly to the magic link from the endpoint’s response. The candidate is then immediately logged into Harver.\n\nThe attributes allow you to pass your custom list of key-value pairs. You can use this to place for example your IDs like “candidate_id“, “requisition_id”, “source” etc to help you link and sync Harver to your system.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications`\n\n**Header:** <br>\nAuthorization: Bearer {access_token}\n\n**Body:**\n```JSON\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"key1\": \"value1\", //Optional key-value pairs\n      \"key2\": \"value2\", //You can retrieve them with the \"ats\" include\n      \"key3\": \"value3\" //with the GET Application request\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"type\": \"candidates\",\n          \"attributes\": {\n            \"emailAddress\": \"candidate@gmail.com\", //Mandatory\n            \"firstName\": \"CandidateFirstName\",  //Mandatory\n            \"lastName\": \"CandidateLastName\" //Mandatory\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n***Response:***\nThe response includes the unique Application ID and a Magic-link for the Candidate.\npayload here\n```\n{\n    \"data\": {\n        \"magicLink\": \"https://my.harver.com/app/landing/{harver_vacancy_id}/magic-link/{unique_code}\",\n        \"applicationId\": \"{harver_application_id}\"\n    }\n}\n```\n\nRepeating this request with the same email address will return the same Application ID with renewed Magic-Link.\n\nIf your account is set to “Magic-link” based authentication for candidates, you can send this link to your candidates or use it to redirect your candidate to Harver. The Magic-link is valid for 1 hour. A ”Magic Link” is kind of an authenticated URL, which you send to the candidate. This helps them to log in to Harver with just one click of the link without entering username & password. It removes all the friction points that might cause the user to drop out of the application process.\n\n**[detailed documentation](https://api.harver.com/docs#tag/candidateApplications)**\n\n***Return_url parameter***\n\nA special attribute can be used when creating a candidate: return_url. That url will be used to redirect the candidate back when they complete the Harver assessment. This way it is possible to add dynamic attributes to that url.\n\n***Example:***\n```\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"return_url\": \"https:/my-ats.com/welcomeback?candidate_id=12345\"\n    },\n  ...\n}\n```\n## Get all information of an application\nTo retrieve an application's relationship data (such as a PDF report, scores etc.), you can make a basic GET applications/{applicationId}, while also providing the include parameter. This include parameter represents a list of comma-separated includes.\n\nEndpoint: <br>\n`GET https://api.harver.com/api/v1.0/applications/{applicationId}`\n\nHeader: <br>\n`Authorization: Bearer {access_token}`\n\nBasic response\n\nThis part is always available, the rest depends on included modules\n```\n\"type\": \"applications\",\n\"id\": \"{harver_application_id}\",\n\"attributes\": {\n    \"appliedAt\": 1630335533,    // timestamp registration\n    \"completedAt\": 1630336749,  // timestamp completed (when completed)\n    \"status\": \"new\",            // status \"new\" means completed Harver assessment, and \"new\" for recruitment\n    \"progress\": {               // Number of modules (incl video & content pages)\n        \"all\": 19,\n        \"completed\": 19\n    },\n    \"matchingScore\": 69,        // Overall Matching Score\n    \"language\": \"ENG\",\n    \"matchingProfile\": {        // Filled when Matching Profile are used in the account\n        \"bracketId\": \"great\",\n        \"label\": \"Green\"\n    }\n},\n\"relationships\": {\n    \"candidate\": {\n        \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"{harver_application_id}\",\n            \"email\": \"{email}\",\n            \"attributes\": {\n                \"firstName\": \"{firstname}\",\n                \"lastName\": \"{lastname}\",\n                \"email\": \"{email}\"\n            }\n        }\n    },\n```\n### Get Application ‘include’ modules\n- `personal-info` & `additional-info` → Candidate personal info and additional questions\n- `ats` → ATS Parameters. These can be your id’s, source parameters, e.g. like a `candidate_id`, `reqId`, `utm_source`\n\n  -- When the candidate is registered using the API: these are the ones that are sent as key-value attributes in creating the candidates\n  -- When the candidate registers directly in Harver: these are the url parameters\n\nExample:\n```\n\"included\": [\n    {\n        \"type\": \"ats-parameters\",\n        \"attributes\": {\n            \"candidate_id\": \"{ats_candidate_id}\",\n            \"job_code\": \"{ats_job_id}\",\n            \"request_id\": \"{ats_request_id}\",\n            \"return_url\": \"https://...\",   // url to return the candidate to when completed Harver\n        }\n    }\n]\n```\n- `report` → A link to:\n  - Harver PDF report. Generated link that will expire in 15 minutes.\n  - Fact Sheet (1 page report). Generated link that will expire in 15 minutes.\n  - Candidate Detail Page. You’ll need to have a Harver account, or SSO enabled, to access the Candidate Detail Page. Will not expire.\n- `matching-results` → detailed scores on the modules\n- `matching-indicators` → detailed info on matching indicators (KMI’s) when configured in the account\n\nExample url: https://api.harver.com/api/v1.0/applications/{application_id}?include=report,cover-letter,resume,matching-results,personal-info,additional-info,ats,matching-indicators\n\n**Scoring & report information**\n- **Overall Matching score:**\n  - Module: always available\n  - Field: `matchingScore`\n  - This is a numerical 0 - 100 score\n- **Score label or Band**\n  - Module: always available if Matching Profiles are configured in Harver Platform.\n  - Field: `\"matchingProfile\"` → `label`.\n  - This is a label or band that can be configured in the Harver Platform based on the score. Typical examples: “Great Fit” / “Good Fit” / “Bad Fit”, “Passed” / “Failed”, “Red” / “Green”\n- **Module scores**\n  - Module: `matching-indicators`\n  - There is a `\"Included\"` → `\"type\": \"matching-indicators\"` for each matching indicator\n- **PDF Report, Factsheet and Candidate result page**\n  - Module: `report`\n  - A direct link to the Candidate’s PDF report and Factsheet.\n  - Note: these links are only available for 15 minutes after requested!\n  - The link to the Candidate detail page is a link to Harver. For this an account at Harver is necessary or SSO needs to be enabled. This link does not expire.\n\n**[detailed documentation](https://api.harver.com/docs#tag/applications/paths/~1applications~1%7BapplicationId%7D/get)**\n\n## Get all candidates and their applications in a vacancy (using the filters)\nTo retrieve a list of the candidates and their applications in a vacancy.\n\nEach candidate has a status. Main statuses:\n- in-progress: Registered, but hasn't completed the application process yet.\n- **new**: Application process completed. It is recommended to filter for this status\n- hired: candidate is hired\n- rejected: candidate is rejected\n\n**Endpoint:** <br>\n`GET https://api.harver.com/api/v1.0/vacancies/{vacancyId}/candidates`\n\n**Header:** <br>\n`Authorization: Bearer {access_token}`\n\n**Useful filter params:**\n\n- filter[status]=new\n- filter[status-updated-at][since]={epoch_timestamp}\n\nYou can combine params like this:\n?filter[status]=new**&**filter[status-updated-at][since]=1582211393\n\nAfter a successful request, the response body will contain the list of (new) Candidates in the Vacancy. Each candidate has an application listed in the “relationships”, this can be used to request the Application Results.\n\nIf you need to periodically query newly finished candidates, we suggest using the “[status-updated-at][since]” filter with the Epoch timestamp of the previous query.\n\nList of possible filters:\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n- `filter[skip_aggregration]`\n\n**[detailed documentation](https://api.harver.com/docs#tag/vacancies/paths/~1vacancies~1%7BvacancyId%7D~1candidates/get)**\n\n## Webhooks from Harver to an ATS\n\nWebhooks allow you to build or set up integrations which subscribe to certain events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured endpoint. The Harver integrations team can configure the webhooks for you.\n\nAvailable events:\n\n- ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n- PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n- AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n- CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n\nWe support NoAuth and Basic Auth (username & password) authentication.\n\nUse the Harver Application Id to get all the details of the application\n\n**[detailed documentation](https://api.harver.com/docs#tag/webhook)**\n# Definitions\n- **Account** - An Account is what holds all of the company specific information within the platform where users of the account can manage settings, Vacancies and Flows.\n- **Vacancy** - Vacancy represents an open position within a company. The Vacancy is where specific information is collected which includes the candidates who wish to apply to that position and their personal information. A Vacancy contains specific information regarding the position for example the location and hours per week the candidate will be expected to work. A vacancy always must have a flow connected to it.\n- **Flow** - A flow is a set of assessment modules and content (videos, static texts), created by an Admin in the system. A Flow must be connected to one or multiple Vacancies.\n- **Modules or Flow modules** - Modules are the separate components used to build a Flow. For instance, a form for the candidate to fill in his/her personal information, a personality questionnaire, multitasking test, etc.\n- **Matching score** - The matching score indicates the extent to which the assessment results of a candidate fit the Vacancy requirements/benchmark. The matching score is calculated based on the combination of results of the different modules that are part of the Flow.\n- **Candidate** - A Candidate represents a person who applied to one or multiple Vacancies.\n- **Application** - A Candidate can apply to multiple Vacancies within an Account. Once a candidate applies to a Vacancy the Application is created.\n- **Webhooks** - Webhooks allow you to build or set up integrations which subscribe to events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured URL.\n"
+  contact:
+    name: Harver Support Team
+    email: support@harver.com
+    url: https://support.harver.com
+servers:
+- url: https://api.harver.com/api/v1.0/
+  description: Production Server
+tags:
+- name: applications
+paths:
+  /applications:
+    get:
+      summary: Returns application ids
+      description: "\nGet harver application ids based on ats-parameters or search by vacancy and email.\n- filter[atsParameters]\nor\n- filter[applicationMeta]\n\n#### Important!!\n\nTo improve the search of applications using atsParameters, the endpoint has been limited to search applications using standardized parameters only. Below is the list of standardized parameters.\n\n- application_id\n- candidate_id\n- country\n- id\n- location\n- source\n- vacancy_id\n\nApart from these, harver provides another 5 customizable standard atsParameters. So the client can do a custom mapping from the client's side and use these standard atsParameters for an application search.\n\n- custom_id_1\n- custom_id_2\n- custom_id_3\n- custom_id_4\n- custom_id_5\n\n#### Example query:\nTo search an application based on atsCandidateId, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/applications?accountId=:accountId&filter[atsParameters][atsCandidateId]=123456789&filter[atsParameters][atdVacancyId]=56254122' \\\n      -H 'Authorization: Bearer ...'\n\nTo search an application based on vacancy and email, you would call the following endpoint:\n\n      curl -X GET \\\n        'https://api.harver.com/api/v1.0/applications?accountId=:accountId&filter[applicationMeta][vacancy]=123456789&filter[applicationMeta][email]=email@test.com' \\\n        -H 'Authorization: Bearer ...'\n"
+      tags:
+      - applications
+      parameters:
+      - in: query
+        name: accountId
+        required: true
+        description: The account to look for
+        schema:
+          type: string
+      - in: query
+        required: true
+        name: filter
+        description: The filter to apply
+        schema:
+          type: string
+          enum:
+          - atsParameters[candidateId]
+          - atsParameters[srcId]
+          - atsParameters[vacancyId]
+          - applicationMeta[vacancy]
+          - applicationMeta[email]
+      responses:
+        '200':
+          description: Returns Application ids
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        id:
+                          type: string
+                        vacancyId:
+                          type: string
+  /applications/{applicationId}:
+    get:
+      summary: Returns the details of an Application
+      description: "### IMPORTANT\nAvoid using all the `include` criteria, unless all modules are enabled in your account. Use `include` criteria for the modules activated in your account.\n## Retrieving relationship data\nTo retrieve an Application's relationship data (such as a PDF report, submitted resume etc.), you can make a basic GET `applications/{applicationId}`, while also providing the `include` parameter. This parameter represents 'a list of comma-separated includes', which are to be included in the response.\n#### Supported includes:\n- `vacancy`\n- `report`\n- `cover-letter`\n- `resume`\n- `profile-photo`\n- `matching-results`\n- `video-pitches`\n- `video-interviews`\n- `personal-info`\n- `additional-info`\n- `grading`\n- `ats`\n- `open-questions`\n- `consents`\n- `application-locations`\n- `locations`\n- `availability`\n- `job-functions`\n- `diagnostics`\n- `location-specific-question`\n- `custom-document`\n- `virtual-interviews`\n- `matching-indicators`\n- `account-questions`\n- `personal-information`\n- `sessions`\n- `fraud-flags`\n- `smart-job-navigator`\n- `proctoring`\n#### Proctoring\nThe `proctoring` include returns the candidate's session-monitoring consent status and out-of-focus tab-switch count. It is only present in the response for vacancies that have Proctoring enabled (i.e. where the application contains a proctoring consent record). When consent is declined, `proctoringResults.outOfFocus.count` will be `null`.\n#### Report\nThe report is shown in the GET Application response in the language in which the candidate has completed the flow. To get the content of the report in a specific language (if available), please specify the language in the request header [`Accept-Language`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language). Please note that multiple language preferences are not supported. The language of the response content will be specified in the response header [`Content-Language`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n#### Personal and Additional Info\nWhen personal or additional info modules are included, attributes will have `questions` field as an array of questions, where each question has the following attributes:\n- `questionId(string)`\n- `question(string)`\n- `answer(mixed)`\n- `answerType(string)`\nFor Retail Flow accounts, the personal-info include's module type will be `Vacancy Questions`\n#### Personal Information (New Module)\nTo get data from new personal information module, you need to add the include `personal-information`. Schema example is added in the response samples.\n#### NOTE: `smart-job-navigator` include returns data only when the application status is not `in progress` .\n#### Example query:\nTo fetch an application with the ID `5bd17c67c081252955b19659` and include `matching-results` and `ats` information in the response, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/applications/5bd17c67c081252955b19659?include=matching-results,ats' \\\n      -H 'Authorization: Bearer ...'\n\n#### NOTE: `open-questions` include will be deprecated, please use `open-question` instead.\n"
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: query
+        name: include
+        description: The include to apply for relationship data. Use comma separated values for include
+        schema:
+          type: string
+          enum:
+          - vacancy
+          - report
+          - cover-letter
+          - resume
+          - profile-photo
+          - matching-results
+          - video-pitches
+          - video-interviews
+          - personal-info
+          - additional-info
+          - grading
+          - ats
+          - open-questions
+          - consents
+          - application-locations
+          - locations
+          - availability
+          - job-functions
+          - diagnostics
+          - location-specific-question
+          - custom-document
+          - virtual-interviews
+          - matching-indicators
+          - account-questions
+          - personal-information
+      responses:
+        '200':
+          description: Returns the details of the Application
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                    - type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          example: applications
+                        id:
+                          type: string
+                        attributes:
+                          additionalProperties: false
+                          required:
+                          - appliedAt
+                          - status
+                          - matchingScore
+                          properties:
+                            appliedAt:
+                              type: integer
+                              format: int64
+                            completedAt:
+                              type: integer
+                              format: int64
+                            status:
+                              type: string
+                            progress:
+                              type: object
+                              properties:
+                                all:
+                                  type: integer
+                                  format: int32
+                                completed:
+                                  type: integer
+                                  format: int32
+                            matchingScore:
+                              format: float
+                              minimum: 0
+                              maximum: 100
+                            language:
+                              type: string
+                              example: ENG
+                            matchingProfile:
+                              type: object
+                              properties:
+                                bracketId:
+                                  type: string
+                                  example: good
+                                label:
+                                  type: string
+                                  example: Good Fit
+                            isRejectedByHardQuestion:
+                              type: boolean
+                        relationships:
+                          properties:
+                            candidate:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  properties:
+                                    id:
+                                      type: string
+                                    type:
+                                      type: string
+                                      example: candidates
+                                    email:
+                                      type: string
+                                    attributes:
+                                      type: object
+                                      properties:
+                                        firstName:
+                                          type: string
+                                        lastName:
+                                          type: string
+                                        email:
+                                          type: string
+                            vacancy:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: vacancies
+                                    id:
+                                      type: string
+                            report:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: reports
+                                    id:
+                                      type: string
+                            fact-sheets:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: fact-sheets
+                                    id:
+                                      type: string
+                            candidate-detail-page:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: candidate-detail-page
+                                    id:
+                                      type: string
+                            cover-letter:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: cover-letters
+                                    id:
+                                      type: string
+                            resume:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: resumes
+                                    id:
+                                      type: string
+                            profile-photo:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: profile-photos
+                                    id:
+                                      type: string
+                            custom-document:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: custom-documents
+                                    id:
+                                      type: string
+                            additional-info:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: additional-info
+                                    id:
+                                      type: string
+                            personal-info:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: personal-info
+                                    id:
+                                      type: string
+                            video-interviews:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: video-interviews
+                                      id:
+                                        type: string
+                            video-pitches:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: video-pitches
+                                      id:
+                                        type: string
+                            matching-results:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: matching-results
+                                      id:
+                                        type: string
+                            job-functions:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - job-functions
+                                      id:
+                                        type: string
+                            locations:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - locations
+                                      id:
+                                        type: string
+                            consents:
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - consents
+                                      id:
+                                        type: string
+                            open-question:
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - open-question
+                                      id:
+                                        type: string
+                            system-diagnostics:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: system-diagnostics
+                                    id:
+                                      type: string
+                            application-locations:
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - application-locations
+                                      id:
+                                        type: string
+                            location-specific-question:
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - location-specific-question
+                                      id:
+                                        type: string
+                            availability:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      enum:
+                                      - availability
+                                    id:
+                                      type: string
+                            virtual-interviews:
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        enum:
+                                        - virtual-interviews
+                                      id:
+                                        type: string
+                            matching-indicators:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    required:
+                                    - type
+                                    - id
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: matching-indicators
+                                      id:
+                                        type: string
+                            account-questions:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: account-questions
+                                    id:
+                                      type: string
+                            personal-information:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: personal-information
+                                    id:
+                                      type: string
+                            account:
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: accounts
+                                    id:
+                                      type: string
+                  included:
+                    type: array
+                    items:
+                      oneOf:
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: vacancies
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - name
+                              - location
+                              properties:
+                                name:
+                                  type: string
+                                location:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - reports
+                              - cover-letters
+                              - resumes
+                              - profile-photos
+                              - custom-documents
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - expiresAt
+                              - url
+                              properties:
+                                expiresAt:
+                                  type: integer
+                                  format: int64
+                                url:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - fact-sheets
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                expiresAt:
+                                  type: integer
+                                url:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - candidate-detail-page
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          - relationships
+                          - meta
+                          properties:
+                            type:
+                              type: string
+                              example: matching-results
+                            id:
+                              type: string
+                            meta: {}
+                            relationships:
+                              required:
+                              - modules
+                              additionalProperties: false
+                              properties:
+                                modules:
+                                  required:
+                                  - data
+                                  additionalProperties: false
+                                  properties:
+                                    data:
+                                      required:
+                                      - type
+                                      - id
+                                      additionalProperties: false
+                                      properties:
+                                        type:
+                                          type: string
+                                          enum:
+                                          - modules
+                                        id:
+                                          type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - language
+                              - calculatedAt
+                              - moduleScore
+                              - moduleWeight
+                              properties:
+                                moduleType:
+                                  type: string
+                                language:
+                                  type: string
+                                calculatedAt:
+                                  type: integer
+                                  format: int64
+                                moduleScore:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                  maximum: 100
+                                moduleWeight:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                  maximum: 1
+                                status:
+                                  type: string
+                                  enum:
+                                  - pass
+                                  - fail
+                                  - unknown
+                                  - skip
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - personal-info
+                              - additional-info
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - questions
+                              properties:
+                                moduleType:
+                                  type: string
+                                questions:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                    - questionId
+                                    - question
+                                    - answer
+                                    - answerType
+                                    properties:
+                                      questionId:
+                                        type: string
+                                      question:
+                                        type: string
+                                      answer:
+                                        type: string
+                                      answerType: {}
+                                      showStoppertype:
+                                        type: string
+                                      isFalseAnswer:
+                                        type: boolean
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - ats-parameters
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - ats-parameters
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - vacancy_id
+                              - candidate_id
+                              - application_id
+                              - src_id
+                              properties:
+                                vacancy_id:
+                                  type: string
+                                candidate_id:
+                                  type: string
+                                application_id:
+                                  type: string
+                                src_id:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - open-questions
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - id
+                              - answers
+                              properties:
+                                id:
+                                  additionalProperties: false
+                                  required:
+                                  - _id
+                                  - __t
+                                  - images
+                                  properties:
+                                    _id:
+                                      type: string
+                                    __t:
+                                      type: string
+                                    images:
+                                      type: array
+                                      items:
+                                        type: object
+                                        additionalProperties: false
+                                        required:
+                                        - _id
+                                        - key
+                                        - value
+                                        - placeHolder
+                                        - fileName
+                                        - __v
+                                        - isRemovable
+                                        properties:
+                                          _id:
+                                            type: string
+                                          key:
+                                            type: string
+                                          value:
+                                            type: string
+                                          placeHolder:
+                                            type: string
+                                          fileName:
+                                            type: string
+                                          __v:
+                                            type: string
+                                          isRemovable:
+                                            type: boolean
+                                answers:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                    - answer
+                                    - question
+                                    properties:
+                                      answer:
+                                        type: string
+                                      question:
+                                        type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - open-question
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                question:
+                                  type: string
+                                answer:
+                                  type: string
+                                images:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      value:
+                                        type: string
+                                      placeHolder:
+                                        type: string
+                                      key:
+                                        type: string
+                                      fileName:
+                                        type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - consents
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - text
+                              - consents
+                              properties:
+                                moduleType:
+                                  type: string
+                                text:
+                                  type: string
+                                consent:
+                                  type: boolean
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - grading
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - grading_status
+                              - grading_notes
+                              - grader_name
+                              - grader_email
+                              properties:
+                                grading_status:
+                                  type: string
+                                grading_notes:
+                                  type: string
+                                grader_name:
+                                  type: string
+                                grader_email:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - application-locations
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - status
+                              - isPreferred
+                              - location-specific-questions
+                              properties:
+                                moduleType:
+                                  type: string
+                                name:
+                                  type: string
+                                status:
+                                  type: string
+                                isPreferred:
+                                  type: boolean
+                                location-specific-questions:
+                                  type: object
+                                  properties:
+                                    ENG:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          vacancy:
+                                            type: string
+                                          question:
+                                            type: string
+                                          _id:
+                                            type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - availability
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                selectedHoursPerWeek:
+                                  type: object
+                                  properties:
+                                    selected:
+                                      type: boolean
+                                    hours:
+                                      type: object
+                                      properties:
+                                        overflow:
+                                          type: boolean
+                                        value:
+                                          type: integer
+                                selectedDaysPerWeek:
+                                  type: object
+                                  properties:
+                                    selected:
+                                      type: boolean
+                                    days:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          timeslots:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                name:
+                                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - locations
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                externalId:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - job-functions
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                title:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - system-diagnostics
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                finalStatus:
+                                  type: string
+                                  enum:
+                                  - pass
+                                  - fail
+                                  - skip
+                                statusDescription:
+                                  type: string
+                                  nullable: true
+                                metaResults:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      platform:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      processor:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      browser:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      ram:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      freeSpace:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      machineType:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      downloadSpeed:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      uploadSpeed:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      latency:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                                      connectionType:
+                                        type: string
+                                        enum:
+                                        - pass
+                                        - fail
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - location-specific-question
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                question:
+                                  type: string
+                                answerType:
+                                  type: string
+                                answer:
+                                  type: string
+                                locationName:
+                                  type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - virtual-interviews
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                moduleType:
+                                  type: string
+                                  example: Virtual Interviews
+                                questions:
+                                  type: array
+                                  items:
+                                    properties:
+                                      question:
+                                        type: string
+                                        description: The interview question text presented to the candidate.
+                                      questionUrl:
+                                        type: string
+                                        description: URL of the question media (e.g. a recorded video question), when available.
+                                      answerUrl:
+                                        type: string
+                                        description: Signed, time-limited URL to the candidate's recorded answer video (.mp4). The link is valid for 1 hour from the moment the application is fetched; request the application again to obtain a fresh URL.
+                                      answerToken:
+                                        type: string
+                                        description: Internal token identifying the answer recording. Use `answerUrl` to play the video; do not construct video URLs from this token.
+                                      isAnswerSkipped:
+                                        type: boolean
+                                        description: Whether the candidate skipped answering this question.
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - matching-indicators
+                            id:
+                              type: string
+                            attributes:
+                              type: object
+                              required:
+                              - name
+                              - score
+                              - bracketId
+                              - externalId
+                              properties:
+                                name:
+                                  type: string
+                                score:
+                                  type: string
+                                bracketId:
+                                  type: string
+                                externalId:
+                                  type: string
+                                fail:
+                                  type: boolean
+                                label:
+                                  type: string
+                                brackets:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      bracketId:
+                                        type: string
+                                      cutoff:
+                                        type: boolean
+                                      name:
+                                        type: string
+                                      treshold:
+                                        type: integer
+                                        format: int32
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: account-questions
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - questions
+                              properties:
+                                moduleType:
+                                  type: string
+                                questions:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                    - key
+                                    - questionId
+                                    - question
+                                    - answer
+                                    - answerIds
+                                    - answerType
+                                    properties:
+                                      key:
+                                        type: string
+                                      questionId:
+                                        type: string
+                                      question:
+                                        type: string
+                                      answerIds:
+                                        type: array
+                                      answer:
+                                        type: string
+                                      answerType:
+                                        type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - id
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: personal-information
+                            id:
+                              type: string
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - moduleType
+                              - questions
+                              properties:
+                                moduleType:
+                                  type: string
+                                questions:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                    - key
+                                    - questionId
+                                    - question
+                                    - answerIds
+                                    - answers
+                                    - answerType
+                                    properties:
+                                      key:
+                                        type: string
+                                      questionId:
+                                        type: string
+                                      question:
+                                        type: string
+                                      answerIds:
+                                        type: array
+                                      answers:
+                                        type: array
+                                      answerType:
+                                        type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: sessions
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - candidateSessions
+                              properties:
+                                candidateSessions:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                    - eventId
+                                    - id
+                                    - timestamp
+                                    - device
+                                    - os
+                                    - browser
+                                    - sessionLocation
+                                    - anonymizerTypes
+                                    properties:
+                                      eventId:
+                                        type: string
+                                      ip:
+                                        type: string
+                                      timestamp:
+                                        type: string
+                                      device:
+                                        type: object
+                                        properties:
+                                          type:
+                                            type: string
+                                          model:
+                                            type: string
+                                          vendor:
+                                            type: string
+                                      os:
+                                        type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          version:
+                                            type: string
+                                      browser:
+                                        type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          version:
+                                            type: string
+                                      sessionLocation:
+                                        type: object
+                                        properties:
+                                          city:
+                                            type: string
+                                          country:
+                                            type: string
+                                          continent:
+                                            type: string
+                                          coordinates:
+                                            type: object
+                                            properties:
+                                              latitude:
+                                                type: string
+                                              longitude:
+                                                type: string
+                                              accuracyRadius:
+                                                type: string
+                                      anonymizerTypes:
+                                        type: object
+                                        properties:
+                                          isAnonymous:
+                                            type: boolean
+                                          isAnonymousVpn:
+                                            type: boolean
+                                          isHostingProvider:
+                                            type: boolean
+                                          isPublicProxy:
+                                            type: boolean
+                                          isResidentialProxy:
+                                            type: boolean
+                                          isTorExitNode:
+                                            type: boolean
+                                      sessionCookieValue:
+                                        type: string
+                                        nullable: true
+                                        description: Cookie-based session identifier captured from the candidate's browser during the assessment session. Absent for sessions recorded before this field was collected.
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: fraud-flags
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - fraudDetectionSessions
+                              properties:
+                                fraudDetectionSessions:
+                                  type: object
+                                  properties:
+                                    vpnLocation:
+                                      type: object
+                                      properties:
+                                        vpnFlag:
+                                          type: string
+                                        location:
+                                          type: object
+                                    reapplyFlag:
+                                      type: object
+                                      properties:
+                                        flagged:
+                                          type: boolean
+                                        applications:
+                                          type: array
+                                          items:
+                                            type: object
+                                            additionalProperties: false
+                                            properties:
+                                              id:
+                                                type: string
+                                              completedAt:
+                                                type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: smart-job-navigator
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - smartjobnavigator
+                              properties:
+                                smartjobnavigator:
+                                  type: object
+                                  properties:
+                                    branches:
+                                      type: array
+                                      items:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          branchId:
+                                            type: string
+                                          name:
+                                            type: string
+                                          selected:
+                                            type: boolean
+                                    isSJNVacancy:
+                                      type: boolean
+                                    finalBranch:
+                                      type: string
+                      - allOf:
+                        - type: object
+                          additionalProperties: false
+                          required:
+                          - type
+                          - attributes
+                          properties:
+                            type:
+                              type: string
+                              example: proctoring
+                            attributes:
+                              additionalProperties: false
+                              required:
+                              - proctoringResults
+                              - consent
+                              properties:
+                                proctoringResults:
+                                  type: object
+                                  properties:
+                                    outOfFocus:
+                                      type: object
+                                      properties:
+                                        count:
+                                          type: integer
+                                          nullable: true
+                                          example: 5
+                                consent:
+                                  type: object
+                                  properties:
+                                    status:
+                                      type: string
+                                      enum:
+                                      - accepted
+                                      - declined
+                                      example: accepted
+                                    consentedAt:
+                                      type: string
+                                      format: date-time
+                                      example: '2026-06-12T08:24:47.896Z'
+    patch:
+      summary: Update an Application
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      requestBody:
+        description: The Application status to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                attributes:
+                  required:
+                  - status
+                  properties:
+                    status:
+                      type: string
+                      enum:
+                      - new
+                      - in-progress
+                      - rejected
+                      - invited
+                      - talent-pool
+                      - hired
+                      - shortlisted
+                      - contract
+                    message:
+                      type: object
+                      properties:
+                        ENG:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        NL:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        FR:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        DE:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        ES:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        IT:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        en-GB:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        pt-PT:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        sv-SE:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        da-DK:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        nb-NO:
+                          type: object
+                          properties:
+                            mailTitle:
+                              type: string
+                            mailBody:
+                              type: string
+                        replyToMail:
+                          type: string
+                        ccMailsList:
+                          type: array
+                          items:
+                            type: string
+                    rejectionReasonData:
+                      type: object
+                      properties:
+                        reason:
+                          type: string
+                        note:
+                          type: string
+      responses:
+        '204':
+          description: Application successfully updated
+    delete:
+      summary: Delete an application using applicationId
+      description: 'To delete an application, the requesting user should have access to the account and the vacancy which the application resides.
+
+        Also the user should be an admin in the account to delete the application
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Application deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    required:
+                    - applicationId
+                    - message
+                    properties:
+                      applicationId:
+                        type: string
+                        example: A mongo id
+                      message:
+                        type: string
+                        example: Application has been deleted
+  /applications/{applicationId}/notes:
+    get:
+      summary: Returns the Application Notes
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of Notes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      properties:
+                        type:
+                          type: string
+                          example: notes
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - body
+                          - author
+                          - createdAt
+                          - modifiedAt
+                          properties:
+                            body:
+                              type: string
+                            author:
+                              type: string
+                            createdAt:
+                              type: integer
+                              format: int64
+                            modifiedAt:
+                              type: integer
+                              format: int64
+                            rejectionReason:
+                              type: string
+                            rejectedFor:
+                              type: string
+                            rejectingUser:
+                              type: string
+                            rejectedLocation:
+                              type: string
+    post:
+      summary: Add a Note to an Application
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      requestBody:
+        description: Note that needs to be added to the Application
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - type
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - notes
+                    attributes:
+                      properties:
+                        body:
+                          type: string
+                        author:
+                          type: string
+      responses:
+        '204':
+          description: Note created successfully
+  /applications/{applicationId}/notes/{noteId}:
+    delete:
+      summary: Delete a Note from the Application
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: path
+        name: noteId
+        schema:
+          type: string
+        required: true
+        description: ID of the Note to consider
+      responses:
+        '204':
+          description: Note deleted
+  /applications/{applicationId}/ats-parameters:
+    patch:
+      summary: Update ats parameters
+      description: 'Endpoint to update the ''ATS Parameters'' for a candidate application
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      requestBody:
+        description: Ats parameters that need to be updated in the candidate application
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: ats-parameters
+                    id:
+                      type: string
+                    attributes:
+                      type: object
+                      additionalProperties: {}
+                      properties:
+                        key:
+                          type: string
+                          example: value
+                          maxLength: 50
+                          description: Key name must be alphanumeric, with - and _ allowed.
+                      description: Must be key -> value pairs, with an upper limit of 20 pairs. Can be used to attach custom values to applications.
+      responses:
+        '204':
+          description: The ats parameters were updated successfully
+  /applications/{applicationId}/locations:
+    patch:
+      summary: Add locations to an application
+      description: 'Endpoint to add locations to a candidate application
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      requestBody:
+        description: Location IDs that need to be added to the candidate application
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: application-locations
+                    id:
+                      type: string
+                      example: <applicationId>
+                    attributes:
+                      required:
+                      - locations
+                      properties:
+                        locations:
+                          type: array
+                          items:
+                            type: string
+                          example:
+                          - <locationId>
+                          - <locationId>
+      responses:
+        '204':
+          description: The locations were added to the application successfully
+  /applications/{applicationId}/locations/ext-{externalLocationId}:
+    patch:
+      summary: Update application status per external location
+      description: 'Endpoint to update the ''status'' per external location for a candidate application
+
+
+        When changing the status to ''HIRED'', the job function ID can be sent in the request body (optional attribute).
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: path
+        name: externalLocationId
+        schema:
+          type: string
+        required: true
+        description: ID of the External Location to consider
+      requestBody:
+        description: Application status (per external location) that needs to be updated in the candidate application
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: application-externalLocations
+                    id:
+                      type: string
+                      example: <externalLocationId>
+                    attributes:
+                      required:
+                      - status
+                      properties:
+                        status:
+                          type: string
+                          enum:
+                          - NEW
+                          - IN PROGRESS
+                          - TALENT POOL
+                          - SHORTLISTED
+                          - INVITED
+                          - HIRED
+                          - CONTRACT
+                          - REJECTED
+                          - READY FOR GRADING
+                        message:
+                          type: object
+                          properties:
+                            ENG:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            NL:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            FR:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            DE:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            ES:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            IT:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            en-GB:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            pt-PT:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            sv-SE:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            da-DK:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            nb-NO:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            replyToMail:
+                              type: string
+                            ccMailsList:
+                              type: array
+                              items:
+                                type: string
+                        hiredJobFunctionId:
+                          type: string
+                        rejectionReasonData:
+                          type: object
+                          properties:
+                            reason:
+                              type: string
+                            note:
+                              type: string
+      responses:
+        '204':
+          description: The status per external location was updated successfully
+  /applications/{applicationId}/locations/{locationId}:
+    patch:
+      summary: Update application status per location
+      description: 'Endpoint to update the ''status'' per location for a candidate application
+
+
+        When changing the status to ''HIRED'', the job function ID can be sent in the request body (optional attribute).
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: path
+        name: locationId
+        schema:
+          type: string
+        required: true
+        description: ID of the Location to consider
+      requestBody:
+        description: Application status (per location) that needs to be updated in the candidate application
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: application-locations
+                    id:
+                      type: string
+                      example: <locationId>
+                    attributes:
+                      required:
+                      - status
+                      properties:
+                        status:
+                          type: string
+                          enum:
+                          - NEW
+                          - IN PROGRESS
+                          - TALENT POOL
+                          - SHORTLISTED
+                          - INVITED
+                          - HIRED
+                          - CONTRACT
+                          - REJECTED
+                          - READY FOR GRADING
+                        message:
+                          type: object
+                          properties:
+                            ENG:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            NL:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            FR:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            DE:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            ES:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            IT:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            en-GB:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            pt-PT:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            sv-SE:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            da-DK:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            nb-NO:
+                              type: object
+                              properties:
+                                mailTitle:
+                                  type: string
+                                mailBody:
+                                  type: string
+                            replyToMail:
+                              type: string
+                            ccMailsList:
+                              type: array
+                              items:
+                                type: string
+                        hiredJobFunctionId:
+                          type: string
+                        rejectionReasonData:
+                          type: object
+                          properties:
+                            reason:
+                              type: string
+                            note:
+                              type: string
+      responses:
+        '204':
+          description: The status per location was updated successfully
+  /applications/{applicationId}/reapply/status:
+    get:
+      summary: Retrieves the re-apply status of a candidate
+      description: 'This endpoint checks whether a candidate is eligible for re-applying. The re-apply status is retrieved using the `applicationId` path parameter. If a candidate is not found, 404 is returned.
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Eligible to re-apply or not
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      canReapply:
+                        type: boolean
+                        example: true
+        '404':
+          description: Candidate not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: Not Found
+                        status:
+                          type: string
+                          example: '404'
+                        title:
+                          type: string
+                          example: Not Found
+                        detail:
+                          type: string
+                          example: Candidate cannot be found
+  /applications/{applicationId}/reports/development-reports:
+    get:
+      summary: Retrieves a link to access development report
+      description: 'This endpoint returns a link to access the development report. The development report can be searched with the `applicationId` and `locale` query parameter.
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: query
+        name: locale
+        description: The locales to consider
+        schema:
+          type: string
+          enum:
+          - en-US
+          - nl-NL
+          - de-DE
+          - da-DK
+          - en-GB
+          - es-ES
+          - fr-BE
+          - fr-CA
+          - fr-FR
+          - pl-PL
+          - pt-PT
+        required: true
+      responses:
+        '200':
+          description: Successfully fetched the link to access the file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      link:
+                        type: string
+                        example: https://api.harver.com/api/v1.0/public/applications/application-id/reports/development-reports/base-64-encoded-string
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: ValidationError
+                        status:
+                          type: number
+                          example: 400
+                        title:
+                          type: string
+                          example: A message thrown by JOI schema validator
+        '404':
+          description: When the report cannot be generated or the application cannot be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: Not Found
+                        status:
+                          type: number
+                          example: 404
+                        title:
+                          type: string
+                          example: Not Found
+                        detail:
+                          type: string
+                          example: Cannot generate development report for the given application
+        '500':
+          description: Any other errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: InternalServerError
+                        status:
+                          type: number
+                          example: 500
+                        title:
+                          type: string
+                          example: InternalServerError
+                        detail:
+                          type: string
+                          example: Internal API error
+  /applications/{applicationId}/reports/interview-guides:
+    get:
+      summary: Retrieves a link to access interview guide
+      description: 'This endpoint returns a link to access the interview guide.
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: query
+        name: extendedValidity
+        description: The extended validity to apply. if this is passed 2 months will be set as the validity period for the document
+        schema:
+          type: boolean
+        required: false
+      responses:
+        '200':
+          description: Successfully fetched the link to access the file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      link:
+                        type: string
+                        example: https://api.harver.com/api/v1.0/public/applications/application-id/reports/interview-guides/base-64-encoded-string?clientId=base-64-encoded-string
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: ValidationError
+                        status:
+                          type: number
+                          example: 400
+                        title:
+                          type: string
+                          example: A message thrown by JOI schema validator
+        '500':
+          description: Any other errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: InternalServerError
+                        status:
+                          type: number
+                          example: 500
+                        title:
+                          type: string
+                          example: InternalServerError
+                        detail:
+                          type: string
+                          example: Error in getting the report
+  /applications/{applicationId}/reports/reports-hub:
+    get:
+      summary: Retrieves a Reports Hub magic link for an application
+      description: 'This endpoint generates a magic link to access the Reports Hub for the given application. The link is valid for the specified expiration time and controls whether PII (name, email, phone) is visible.
+
+        '
+      tags:
+      - applications
+      parameters:
+      - in: path
+        name: applicationId
+        required: true
+        description: ID of the Application to consider ([0-9a-f]{24})
+        schema:
+          type: string
+      - in: query
+        name: expiresIn
+        required: true
+        description: Link expiration time in seconds. Must be between 2 weeks (1209600) and 1 year (31536000).
+        schema:
+          type: integer
+          minimum: 1209600
+          maximum: 31536000
+          example: 1209600
+      - in: query
+        name: allowedPII
+        required: true
+        description: Controls whether PII (name, email, phone) is visible in the Reports Hub. This value is embedded in the token at issuance time.
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: Successfully generated the Reports Hub magic link
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      link:
+                        type: string
+                        example: https://app.harver.com/reports-hub?token=eyJhbGciOiJIUzI1NiJ9...&lang=en-US
+        '400':
+          description: Validation error — missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: ValidationError
+                        status:
+                          type: number
+                          example: 400
+                        title:
+                          type: string
+                          example: A message thrown by JOI schema validator
+        '401':
+          description: Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: Unauthorized
+                        status:
+                          type: number
+                          example: 401
+                        title:
+                          type: string
+                          example: Unauthorized
+        '404':
+          description: Application not found or Reports Hub link could not be generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: Not Found
+                        status:
+                          type: number
+                          example: 404
+                        title:
+                          type: string
+                          example: Not Found
+                        detail:
+                          type: string
+                          example: Cannot generate reports hub link for the given application
+        '500':
+          description: Any other errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: InternalServerError
+                        status:
+                          type: number
+                          example: 500
+                        title:
+                          type: string
+                          example: InternalServerError
+                        detail:
+                          type: string
+                          example: Internal API error

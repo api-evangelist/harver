@@ -1,0 +1,2731 @@
+openapi: 3.0.0
+info:
+  version: 1.37.0
+  title: Harver Public accounts API
+  description: "Public API of the Harver Platform available only for the Customers of Harver. <br>\n# Quick Start\n## How to access our environments\nWe provide the API access keys and Account IDs for each standard environment. We suggest using our TEST (harver-test.com) environment during the development phase.\n\nAvailable Harver environments for clients:\n- Test: `https://api.harver-test.com`\n- Production: `https://api.harver.com`\n\n## Authentication\nHarver Public API uses OAuth2 authentication. Once you have obtained an access token (valid for 1 hour) you can use it in the Authentication Header as a “Bearer” token for all following requests.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/oauth/token`\n\n**Note:** <br>\nin TEST env, POST https://api.harver-test.com/oauth/token\n\n**Content-Type:** <br>\napplication/x-www-form-urlencoded\n\n**Body:**\n- grant_type → client_credentials\n- client_id → Provided by Harver\n- client_secret → Provided by Harver\n\nAfter a successful request, the response will contain the “access-token“.\n\n**Example**\n```\ncurl --location --request POST 'https://api.harver-test.com/oauth/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={your_client_id}' \\\n--data-urlencode 'client_secret={your_client_secret}'\n```\n**[detailed documentation](https://api.harver.com/docs#tag/oauth)**\n\n\n## Rate - Limiting\n\nHarver API is guarded by rate-limiting. When the allocated rate-limit is exceeded, the API returns HTTP status code 429. (Too many requests).\n\nIn the Production and Testing environments, the default limits will be 450 and 300 requests per minute, respectively. There are two new rate-limiting headers added to the responses as below.\n\n- **Ratelimit-Limit** – The request limit for the time period\n- **Ratelimit-Reset** - The time remaining in the current window, specified in seconds\n\n## Correlation ID\n\nThe responses now include a new header called `X-Correlation-Id`. When submitting a support request, please include this ID. \n\n## How to create a candidate with an application\nSubmit candidates to Harver in order to invite them to complete the Harver Journey.\n\nHarver can invite the candidate by sending an email to the candidate with a magic link to start the Harver journey\n\nYou can also redirect candidates directly to the magic link from the endpoint’s response. The candidate is then immediately logged into Harver.\n\nThe attributes allow you to pass your custom list of key-value pairs. You can use this to place for example your IDs like “candidate_id“, “requisition_id”, “source” etc to help you link and sync Harver to your system.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications`\n\n**Header:** <br>\nAuthorization: Bearer {access_token}\n\n**Body:**\n```JSON\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"key1\": \"value1\", //Optional key-value pairs\n      \"key2\": \"value2\", //You can retrieve them with the \"ats\" include\n      \"key3\": \"value3\" //with the GET Application request\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"type\": \"candidates\",\n          \"attributes\": {\n            \"emailAddress\": \"candidate@gmail.com\", //Mandatory\n            \"firstName\": \"CandidateFirstName\",  //Mandatory\n            \"lastName\": \"CandidateLastName\" //Mandatory\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n***Response:***\nThe response includes the unique Application ID and a Magic-link for the Candidate.\npayload here\n```\n{\n    \"data\": {\n        \"magicLink\": \"https://my.harver.com/app/landing/{harver_vacancy_id}/magic-link/{unique_code}\",\n        \"applicationId\": \"{harver_application_id}\"\n    }\n}\n```\n\nRepeating this request with the same email address will return the same Application ID with renewed Magic-Link.\n\nIf your account is set to “Magic-link” based authentication for candidates, you can send this link to your candidates or use it to redirect your candidate to Harver. The Magic-link is valid for 1 hour. A ”Magic Link” is kind of an authenticated URL, which you send to the candidate. This helps them to log in to Harver with just one click of the link without entering username & password. It removes all the friction points that might cause the user to drop out of the application process.\n\n**[detailed documentation](https://api.harver.com/docs#tag/candidateApplications)**\n\n***Return_url parameter***\n\nA special attribute can be used when creating a candidate: return_url. That url will be used to redirect the candidate back when they complete the Harver assessment. This way it is possible to add dynamic attributes to that url.\n\n***Example:***\n```\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"return_url\": \"https:/my-ats.com/welcomeback?candidate_id=12345\"\n    },\n  ...\n}\n```\n## Get all information of an application\nTo retrieve an application's relationship data (such as a PDF report, scores etc.), you can make a basic GET applications/{applicationId}, while also providing the include parameter. This include parameter represents a list of comma-separated includes.\n\nEndpoint: <br>\n`GET https://api.harver.com/api/v1.0/applications/{applicationId}`\n\nHeader: <br>\n`Authorization: Bearer {access_token}`\n\nBasic response\n\nThis part is always available, the rest depends on included modules\n```\n\"type\": \"applications\",\n\"id\": \"{harver_application_id}\",\n\"attributes\": {\n    \"appliedAt\": 1630335533,    // timestamp registration\n    \"completedAt\": 1630336749,  // timestamp completed (when completed)\n    \"status\": \"new\",            // status \"new\" means completed Harver assessment, and \"new\" for recruitment\n    \"progress\": {               // Number of modules (incl video & content pages)\n        \"all\": 19,\n        \"completed\": 19\n    },\n    \"matchingScore\": 69,        // Overall Matching Score\n    \"language\": \"ENG\",\n    \"matchingProfile\": {        // Filled when Matching Profile are used in the account\n        \"bracketId\": \"great\",\n        \"label\": \"Green\"\n    }\n},\n\"relationships\": {\n    \"candidate\": {\n        \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"{harver_application_id}\",\n            \"email\": \"{email}\",\n            \"attributes\": {\n                \"firstName\": \"{firstname}\",\n                \"lastName\": \"{lastname}\",\n                \"email\": \"{email}\"\n            }\n        }\n    },\n```\n### Get Application ‘include’ modules\n- `personal-info` & `additional-info` → Candidate personal info and additional questions\n- `ats` → ATS Parameters. These can be your id’s, source parameters, e.g. like a `candidate_id`, `reqId`, `utm_source`\n\n  -- When the candidate is registered using the API: these are the ones that are sent as key-value attributes in creating the candidates\n  -- When the candidate registers directly in Harver: these are the url parameters\n\nExample:\n```\n\"included\": [\n    {\n        \"type\": \"ats-parameters\",\n        \"attributes\": {\n            \"candidate_id\": \"{ats_candidate_id}\",\n            \"job_code\": \"{ats_job_id}\",\n            \"request_id\": \"{ats_request_id}\",\n            \"return_url\": \"https://...\",   // url to return the candidate to when completed Harver\n        }\n    }\n]\n```\n- `report` → A link to:\n  - Harver PDF report. Generated link that will expire in 15 minutes.\n  - Fact Sheet (1 page report). Generated link that will expire in 15 minutes.\n  - Candidate Detail Page. You’ll need to have a Harver account, or SSO enabled, to access the Candidate Detail Page. Will not expire.\n- `matching-results` → detailed scores on the modules\n- `matching-indicators` → detailed info on matching indicators (KMI’s) when configured in the account\n\nExample url: https://api.harver.com/api/v1.0/applications/{application_id}?include=report,cover-letter,resume,matching-results,personal-info,additional-info,ats,matching-indicators\n\n**Scoring & report information**\n- **Overall Matching score:**\n  - Module: always available\n  - Field: `matchingScore`\n  - This is a numerical 0 - 100 score\n- **Score label or Band**\n  - Module: always available if Matching Profiles are configured in Harver Platform.\n  - Field: `\"matchingProfile\"` → `label`.\n  - This is a label or band that can be configured in the Harver Platform based on the score. Typical examples: “Great Fit” / “Good Fit” / “Bad Fit”, “Passed” / “Failed”, “Red” / “Green”\n- **Module scores**\n  - Module: `matching-indicators`\n  - There is a `\"Included\"` → `\"type\": \"matching-indicators\"` for each matching indicator\n- **PDF Report, Factsheet and Candidate result page**\n  - Module: `report`\n  - A direct link to the Candidate’s PDF report and Factsheet.\n  - Note: these links are only available for 15 minutes after requested!\n  - The link to the Candidate detail page is a link to Harver. For this an account at Harver is necessary or SSO needs to be enabled. This link does not expire.\n\n**[detailed documentation](https://api.harver.com/docs#tag/applications/paths/~1applications~1%7BapplicationId%7D/get)**\n\n## Get all candidates and their applications in a vacancy (using the filters)\nTo retrieve a list of the candidates and their applications in a vacancy.\n\nEach candidate has a status. Main statuses:\n- in-progress: Registered, but hasn't completed the application process yet.\n- **new**: Application process completed. It is recommended to filter for this status\n- hired: candidate is hired\n- rejected: candidate is rejected\n\n**Endpoint:** <br>\n`GET https://api.harver.com/api/v1.0/vacancies/{vacancyId}/candidates`\n\n**Header:** <br>\n`Authorization: Bearer {access_token}`\n\n**Useful filter params:**\n\n- filter[status]=new\n- filter[status-updated-at][since]={epoch_timestamp}\n\nYou can combine params like this:\n?filter[status]=new**&**filter[status-updated-at][since]=1582211393\n\nAfter a successful request, the response body will contain the list of (new) Candidates in the Vacancy. Each candidate has an application listed in the “relationships”, this can be used to request the Application Results.\n\nIf you need to periodically query newly finished candidates, we suggest using the “[status-updated-at][since]” filter with the Epoch timestamp of the previous query.\n\nList of possible filters:\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n- `filter[skip_aggregration]`\n\n**[detailed documentation](https://api.harver.com/docs#tag/vacancies/paths/~1vacancies~1%7BvacancyId%7D~1candidates/get)**\n\n## Webhooks from Harver to an ATS\n\nWebhooks allow you to build or set up integrations which subscribe to certain events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured endpoint. The Harver integrations team can configure the webhooks for you.\n\nAvailable events:\n\n- ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n- PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n- AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n- CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n\nWe support NoAuth and Basic Auth (username & password) authentication.\n\nUse the Harver Application Id to get all the details of the application\n\n**[detailed documentation](https://api.harver.com/docs#tag/webhook)**\n# Definitions\n- **Account** - An Account is what holds all of the company specific information within the platform where users of the account can manage settings, Vacancies and Flows.\n- **Vacancy** - Vacancy represents an open position within a company. The Vacancy is where specific information is collected which includes the candidates who wish to apply to that position and their personal information. A Vacancy contains specific information regarding the position for example the location and hours per week the candidate will be expected to work. A vacancy always must have a flow connected to it.\n- **Flow** - A flow is a set of assessment modules and content (videos, static texts), created by an Admin in the system. A Flow must be connected to one or multiple Vacancies.\n- **Modules or Flow modules** - Modules are the separate components used to build a Flow. For instance, a form for the candidate to fill in his/her personal information, a personality questionnaire, multitasking test, etc.\n- **Matching score** - The matching score indicates the extent to which the assessment results of a candidate fit the Vacancy requirements/benchmark. The matching score is calculated based on the combination of results of the different modules that are part of the Flow.\n- **Candidate** - A Candidate represents a person who applied to one or multiple Vacancies.\n- **Application** - A Candidate can apply to multiple Vacancies within an Account. Once a candidate applies to a Vacancy the Application is created.\n- **Webhooks** - Webhooks allow you to build or set up integrations which subscribe to events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured URL.\n"
+  contact:
+    name: Harver Support Team
+    email: support@harver.com
+    url: https://support.harver.com
+servers:
+- url: https://api.harver.com/api/v1.0/
+  description: Production Server
+tags:
+- name: accounts
+paths:
+  /accounts:
+    get:
+      summary: Returns all the available Accounts based on the access rights
+      tags:
+      - accounts
+      responses:
+        '200':
+          description: An array of Accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 2
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                      - required:
+                        - id
+                        - type
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - accounts
+                            - images
+                            - candidates
+                            - applications
+                            - vacancies
+                            - modules
+                          id:
+                            type: string
+                      - type: object
+                        required:
+                        - attributes
+                        - relationships
+                        properties:
+                          attributes:
+                            additionalProperties: false
+                            required:
+                            - name
+                            - domain
+                            properties:
+                              name:
+                                type: string
+                              domain:
+                                type: string
+                                nullable: true
+                          relationships:
+                            additionalProperties: false
+                            required:
+                            - data
+                            properties:
+                              images:
+                                additionalProperties: false
+                                minProperties: 1
+                                properties:
+                                  data:
+                                    type: array
+                                    items:
+                                      allOf:
+                                      - type: object
+                                        required:
+                                        - meta
+                                        properties:
+                                          id:
+                                            type: string
+                                          type:
+                                            type: string
+                                            example: images
+                                          meta:
+                                            additionalProperties: false
+                                            required:
+                                            - image
+                                            - type
+                                            - removable
+                                            properties:
+                                              image:
+                                                type: string
+                                              type:
+                                                type: string
+                                              removable:
+                                                type: boolean
+                              configurations:
+                                additionalProperties: false
+                                properties:
+                                  data:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                      attributes:
+                                        properties:
+                                          rejectReasonsEnabled:
+                                            type: boolean
+                                          retailFlowEnabled:
+                                            type: boolean
+                                          schedulingEnabled:
+                                            type: boolean
+                  meta:
+                    required:
+                    - count
+                    properties:
+                      count:
+                        type: integer
+                        format: int32
+  /accounts/{accountId}/candidates:
+    get:
+      summary: Returns all Candidates of an Account
+      description: "To obtain the list of candidates in an Account, perform a `GET` operation to the `/accounts/<account-id>/candidates` endpoint.\n\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[email]`\n\n#### Example query:\nTo fetch one candidate in account `5ab8845731e881343fa7458c` with the email address `testuser@harver.com`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/candidates?filter[email]=testuser@harver.com' \\\n      -H 'Authorization: Bearer ...'\n\n#### NOTE: If there are no candidates or a candidate is not found when filter by email is used, an empty data array will be returned.      \n"
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: An array of Candidates
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                      - type: object
+                        required:
+                        - type
+                        - id
+                        - attributes
+                        properties:
+                          type:
+                            type: string
+                            example: candidates
+                          id:
+                            type: string
+                          attributes:
+                            additionalProperties: false
+                            required:
+                            - emailAddress
+                            - firstName
+                            - lastName
+                            - address
+                            - registeredAt
+                            properties:
+                              emailAddress:
+                                type: string
+                              firstName:
+                                type: string
+                              lastName:
+                                type: string
+                              address:
+                                type: string
+                              registeredAt:
+                                type: integer
+                                format: int64
+  /accounts/{accountId}/candidates/{candidateId}/applications:
+    get:
+      summary: Returns all Applications of a Candidate in an Account
+      deprecated: true
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: candidateId
+        schema:
+          type: string
+        required: true
+        description: ID of the candidate to consider
+      responses:
+        '200':
+          description: An array of Applications
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 1
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: applications
+                          id:
+                            type: string
+                          attributes:
+                            additionalProperties: false
+                            required:
+                            - appliedAt
+                            - matchingScore
+                            - status
+                            properties:
+                              appliedAt:
+                                type: integer
+                                format: int64
+                              matchingScore:
+                                type: number
+                                format: float
+                                minimum: 0
+                                maximum: 100
+                              status:
+                                type: string
+                                enum:
+                                - new
+                                - in-progress
+                                - rejected
+                                - invited
+                                - talent-pool
+                                - hired
+                                - shortlisted
+                                - contract
+                          relationships:
+                            additionalProperties: false
+                            required:
+                            - candidate
+                            properties:
+                              candidate:
+                                additionalProperties: false
+                                required:
+                                - data
+                                properties:
+                                  data:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: candidates
+                                      id:
+                                        type: string
+  /accounts/{accountId}/vacancies:
+    get:
+      summary: Returns all Vacancies of an Account
+      description: "To obtain the list of Vacancies available for an Account, perform a `GET` operation to the `/accounts/<account-id>/vacancies` endpoint.\nTo get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Please note that multiple language preferences are not supported, content language will be defined by the first language on the list. <br> The language of the response content will be specified in the response header `Content-Language`. More info about [Content-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[status]`\n- `filter[locations]`\n- `filter[regions]`\n- `filter[external_location_id]`\n- `filter[skip_aggregation]`\n\nFor filtering by locations, regions and external location ID, comma separated values can be used. Ex: `?filter[locations]={ID1},{ID2}`\n#### Example query:\nTo fetch all vacancies of account `5ab8845731e881343fa7458c` that have vacancies in status `draft`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/vacancies?filter[status]=draft' \\\n      -H 'Accept-Language: en' \\\n      -H 'Authorization: Bearer ...'\nTo fetch all vacancies of account `5ab8845731e881343fa7458c` that have vacancies in status `draft`, location ID `5c484fdece609b10529e1e3f`  and in language `nl`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/vacancies?filter[status]=draft&filter[locations]=5c484fdece609b10529e1e3f' \\\n      -H 'Accept-Language: nl' \\\n      -H 'Authorization: Bearer ...'\n\n#### Increasing Performance\n`filter[skip_aggregation]=true` will skip aggregating candidate count in a vacancy, resulting in a faster response\n"
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+          - it
+          - es
+          - de
+        description: Language to localize resource (if not provided, default to en)
+      - in: query
+        name: filter
+        description: The Vacancy filter to apply
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - draft
+              - open
+              - closed
+            locations:
+              type: string
+            regions:
+              type: string
+            external_location_id:
+              type: string
+            skip_aggregation:
+              type: string
+              enum:
+              - 'true'
+              - 'false'
+      responses:
+        '200':
+          description: An array of Vacancies
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 2
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      allOf:
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: vacancies
+                          id:
+                            type: string
+                          attributes:
+                            additionalProperties: false
+                            required:
+                            - name
+                            - title
+                            - description
+                            - location
+                            - createdAt
+                            - applicationUrl
+                            properties:
+                              name:
+                                type: string
+                              title:
+                                type: string
+                              description:
+                                type: string
+                              location:
+                                type: string
+                              createdAt:
+                                type: integer
+                                format: int64
+                              applicationUrl:
+                                type: string
+                          meta:
+                            additionalProperties: false
+                            required:
+                            - candidates-per-status
+                            properties:
+                              candidates-per-status:
+                                additionalProperties: false
+                                required:
+                                - new
+                                - in-progress
+                                - rejected
+                                - invited
+                                - talent-pool
+                                - hired
+                                - shortlisted
+                                - contract
+                                properties:
+                                  new:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  in-progress:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  rejected:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  invited:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  talent-pool:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  hired:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  shortlisted:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                                  contract:
+                                    type: integer
+                                    format: int32
+                                    minimum: 0
+                  meta:
+                    required:
+                    - count
+                    properties:
+                      count:
+                        type: integer
+                        format: int32
+                  relationships:
+                    type: object
+                    properties:
+                      locations:
+                        type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: locations
+                                id:
+                                  type: string
+                                attributes:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                    externalLocationId:
+                                      type: string
+                                    jobFunctions:
+                                      type: array
+                                      items:
+                                        type: string
+                      regions:
+                        type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: regions
+                                id:
+                                  type: string
+  /accounts/{accountId}/channels/{channelId}/vacancies:
+    get:
+      summary: Returns all vacancies of an Account in a specific Channel
+      description: "## Retrieving relationship data\nTo obtain the list of Vacancies available for a specific Channel, perform a `GET` operation to the `/accounts/<account-id>/channels/<channel-id>/vacancies` endpoint. <br><br> To get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Please note that multiple language preferences are not supported, content language will be defined by the first language on the list. <br> The language of the response content will be specified in the response header `Content-Language`. More info about [Content-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[status]`\n\n#### Example query:\nTo fetch all vacancies of an Account in a specific Channel and in language `nl`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/{accountId}/channels/{channelName}/vacancies' \\\n      -H 'Accept-Language: nl' \\\n      -H 'Authorization: Bearer ...'\n\nTo fetch all open Vacancies of the account `5ab8845731e881343fa7458c`, available for publishing in a specific channel in English (en), you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/channels/{channelName}/vacancies?filter[status]=open' \\\n      -H 'Accept-Language: en' \\\n      -H 'Authorization: Bearer ...'\n"
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: channelId
+        schema:
+          type: string
+        required: true
+        description: string GUID of the Channel to consider
+      - in: query
+        name: filter
+        description: The Vacancy filter to apply
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - draft
+              - open
+              - closed
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+          - it
+          - es
+          - de
+        description: Language to localize resource (if not provided, default to en)
+      responses:
+        '200':
+          description: An array of Vacancies
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 2
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: vacancies
+                        id:
+                          type: string
+                        attributes:
+                          additionalProperties: false
+                          required:
+                          - name
+                          - title
+                          - description
+                          - location
+                          - createdAt
+                          - applicationUrl
+                          properties:
+                            name:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            location:
+                              type: string
+                            createdAt:
+                              type: integer
+                              format: int64
+                            applicationUrl:
+                              type: string
+                        meta:
+                          additionalProperties: false
+                          minProperties: 2
+                          properties:
+                            candidates-per-status:
+                              additionalProperties: false
+                              required:
+                              - new
+                              - in-progress
+                              - rejected
+                              - invited
+                              - talent-pool
+                              - hired
+                              - shortlisted
+                              - contract
+                              properties:
+                                new:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                in-progress:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                rejected:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                invited:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                talent-pool:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                hired:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                shortlisted:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                                contract:
+                                  type: integer
+                                  format: int32
+                                  minimum: 0
+                            customAttributes:
+                              additionalProperties: false
+                              required:
+                              - title
+                              - description
+                              properties:
+                                title:
+                                  type: string
+                                description:
+                                  type: string
+                                Region:
+                                  type: array
+                                  items:
+                                    type: string
+                                Organization:
+                                  type: array
+                                  items:
+                                    type: string
+                                City:
+                                  type: array
+                                  items:
+                                    type: string
+                                Location:
+                                  type: array
+                                  items:
+                                    type: string
+                                Department:
+                                  type: array
+                                  items:
+                                    type: string
+                                Hours per week:
+                                  type: array
+                                  items:
+                                    type: string
+                                Contract type:
+                                  type: array
+                                  items:
+                                    type: string
+                  meta:
+                    required:
+                    - count
+                    properties:
+                      count:
+                        type: integer
+                        format: int32
+  /accounts/{accountId}/location-specific-questions:
+    get:
+      summary: Returns all Location specific questions
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: List of Location specific questions
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - location-specific-questions
+                        id:
+                          type: string
+                        attributes:
+                          additionalProperties: false
+                          required:
+                          - text
+                          properties:
+                            text:
+                              type: string
+                        relationships:
+                          additionalProperties: false
+                          properties:
+                            vacancy:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  required:
+                                  - type
+                                  - id
+                                  properties:
+                                    type:
+                                      type: string
+                                    id:
+                                      type: string
+  /accounts/{accountId}/locations:
+    get:
+      summary: Returns all Locations of an Account
+      description: 'Supports pagination with filter[limit] and filter[offset] parameters. When having these two filter parameters related to pagination, an extra object called ''meta'' will be included in the body. This will include the count of all the available locations
+
+        '
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: query
+        name: filter
+        description: The location pagination filters to apply
+        schema:
+          type: object
+          properties:
+            limit:
+              type: string
+            offset:
+              type: string
+      responses:
+        '200':
+          description: An array of Locations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - locations
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - name
+                          - address
+                          - externalId
+                          - hiringChance
+                          - minHoursAvailability
+                          - walkInTimes
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                            addressDetails:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                city:
+                                  type: string
+                                street:
+                                  type: string
+                                streetNumber:
+                                  type: string
+                            email:
+                              type: string
+                              nullable: true
+                            externalId:
+                              type: string
+                              nullable: true
+                            hiringChance:
+                              type: integer
+                              format: int32
+                            walkInTimems:
+                              type: array
+                              items:
+                                properties:
+                                  from:
+                                    type: integer
+                                    format: int64
+                                  to:
+                                    type: integer
+                                    format: int64
+                            isActive:
+                              type: boolean
+                        relationships:
+                          required:
+                          - region
+                          - job-functions
+                          - location-specific-questions
+                          properties:
+                            region:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                            job-functions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: job-functions
+                                      id:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        properties:
+                                          status:
+                                            type: string
+                                            enum:
+                                            - open
+                                            - closed
+                            location-specific-questions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: location-specific-questions
+                                      id:
+                                        type: string
+                                      language:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          question:
+                                            type: string
+                                          vacancy:
+                                            type: string
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+    post:
+      summary: Create a Location
+      description: 'Creates a location and sends the created location or all the locations in that account
+
+        - `last_insert` : Can be `true` or `false`. When `true`, only the created location is sent. When `false` or the query param is not added, all the locations in the account are sent after creating the location
+
+        '
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: query
+        name: last_insert
+        description: Whether to send the created location or all the locations in the account. When the value is 'true', only the created location is sent
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      requestBody:
+        description: Location object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - type
+                  - attributes
+                  - relationships
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - locations
+                    attributes:
+                      additionalProperties: false
+                      required:
+                      - name
+                      - address
+                      - email
+                      - hiringChance
+                      - minHoursAvailability
+                      - walkInTimes
+                      properties:
+                        name:
+                          type: string
+                        address:
+                          type: string
+                        addressDetails:
+                          type: object
+                          properties:
+                            country:
+                              type: string
+                            state:
+                              type: string
+                            postalCode:
+                              type: string
+                            city:
+                              type: string
+                            street:
+                              type: string
+                            streetNumber:
+                              type: string
+                        email:
+                          type: string
+                        externalId:
+                          type: string
+                        hiringChance:
+                          type: integer
+                          format: int32
+                        walkInTimes:
+                          type: array
+                          items:
+                            properties:
+                              from:
+                                type: integer
+                                format: int64
+                              to:
+                                type: integer
+                                format: int64
+                              date:
+                                additionalProperties: false
+                                required:
+                                - day
+                                - month
+                                - year
+                                properties:
+                                  day:
+                                    type: number
+                                  month:
+                                    type: number
+                                  year:
+                                    type: number
+                        isActive:
+                          type: boolean
+                    relationships:
+                      additionalProperties: false
+                      required:
+                      - region
+                      - job-functions
+                      - location-specific-questions
+                      properties:
+                        region:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              properties:
+                                type:
+                                  type: string
+                                  example: regions
+                                id:
+                                  type: string
+                        job-functions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: job-functions
+                                  id:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    properties:
+                                      status:
+                                        type: string
+                                        enum:
+                                        - open
+                                        - closed
+                        location-specific-questions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: location-specific-questions
+                                  id:
+                                    type: string
+                                  language:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      question:
+                                        type: string
+                                      vacancy:
+                                        type: string
+      responses:
+        '200':
+          description: 'Created location or all the locations
+
+            '
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        required:
+                        - id
+                        - type
+                        - attributes
+                        - relationships
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - locations
+                          id:
+                            type: string
+                          attributes:
+                            required:
+                            - name
+                            - address
+                            - externalId
+                            - hiringChance
+                            - minHoursAvailability
+                            - walkInTimes
+                            properties:
+                              name:
+                                type: string
+                              address:
+                                type: string
+                              addressDetails:
+                                type: object
+                                properties:
+                                  country:
+                                    type: string
+                                  state:
+                                    type: string
+                                  postalCode:
+                                    type: string
+                                  city:
+                                    type: string
+                                  street:
+                                    type: string
+                                  streetNumber:
+                                    type: string
+                              email:
+                                type: string
+                                nullable: true
+                              externalId:
+                                type: string
+                                nullable: true
+                              hiringChance:
+                                type: integer
+                                format: int32
+                              walkInTimems:
+                                type: array
+                                items:
+                                  properties:
+                                    from:
+                                      type: integer
+                                      format: int64
+                                    to:
+                                      type: integer
+                                      format: int64
+                              isActive:
+                                type: boolean
+                          relationships:
+                            required:
+                            - region
+                            - job-functions
+                            - location-specific-questions
+                            properties:
+                              region:
+                                additionalProperties: false
+                                properties:
+                                  data:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: regions
+                                      id:
+                                        type: string
+                              job-functions:
+                                properties:
+                                  data:
+                                    type: array
+                                    items:
+                                      properties:
+                                        type:
+                                          type: string
+                                          example: job-functions
+                                        id:
+                                          type: string
+                                        attributes:
+                                          type: object
+                                          properties:
+                                            status:
+                                              type: string
+                                              enum:
+                                              - open
+                                              - closed
+                              location-specific-questions:
+                                properties:
+                                  data:
+                                    type: array
+                                    items:
+                                      properties:
+                                        type:
+                                          type: string
+                                          example: location-specific-questions
+                                        id:
+                                          type: string
+                                        language:
+                                          type: string
+                                        attributes:
+                                          type: object
+                                          additionalProperties: false
+                                          properties:
+                                            question:
+                                              type: string
+                                            vacancy:
+                                              type: string
+                - type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - locations
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - name
+                          - address
+                          - externalId
+                          - hiringChance
+                          - minHoursAvailability
+                          - walkInTimes
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                            addressDetails:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                city:
+                                  type: string
+                                street:
+                                  type: string
+                                streetNumber:
+                                  type: string
+                            email:
+                              type: string
+                              nullable: true
+                            externalId:
+                              type: string
+                              nullable: true
+                            hiringChance:
+                              type: integer
+                              format: int32
+                            walkInTimems:
+                              type: array
+                              items:
+                                properties:
+                                  from:
+                                    type: integer
+                                    format: int64
+                                  to:
+                                    type: integer
+                                    format: int64
+                            isActive:
+                              type: boolean
+                        relationships:
+                          required:
+                          - region
+                          - job-functions
+                          - location-specific-questions
+                          properties:
+                            region:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                            job-functions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: job-functions
+                                      id:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        properties:
+                                          status:
+                                            type: string
+                                            enum:
+                                            - open
+                                            - closed
+                            location-specific-questions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: location-specific-questions
+                                      id:
+                                        type: string
+                                      language:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          question:
+                                            type: string
+                                          vacancy:
+                                            type: string
+  /accounts/{accountId}/locations/{locationId}:
+    get:
+      summary: Return a location by location ID
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: locationId
+        schema:
+          type: string
+        required: true
+        description: ID of the Location to consider
+      responses:
+        '200':
+          description: The requested location
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - locations
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - name
+                          - address
+                          - externalId
+                          - hiringChance
+                          - minHoursAvailability
+                          - walkInTimes
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                            addressDetails:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                city:
+                                  type: string
+                                street:
+                                  type: string
+                                streetNumber:
+                                  type: string
+                            email:
+                              type: string
+                              nullable: true
+                            externalId:
+                              type: string
+                              nullable: true
+                            hiringChance:
+                              type: integer
+                              format: int32
+                            walkInTimems:
+                              type: array
+                              items:
+                                properties:
+                                  from:
+                                    type: integer
+                                    format: int64
+                                  to:
+                                    type: integer
+                                    format: int64
+                            isActive:
+                              type: boolean
+                        relationships:
+                          required:
+                          - region
+                          - job-functions
+                          - location-specific-questions
+                          properties:
+                            region:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                            job-functions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: job-functions
+                                      id:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        properties:
+                                          status:
+                                            type: string
+                                            enum:
+                                            - open
+                                            - closed
+                            location-specific-questions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: location-specific-questions
+                                      id:
+                                        type: string
+                                      language:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          question:
+                                            type: string
+                                          vacancy:
+                                            type: string
+    patch:
+      summary: Update a Location
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: locationId
+        schema:
+          type: string
+        required: true
+        description: ID of the Location to consider
+      requestBody:
+        description: Location object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - id
+                  - type
+                  - attributes
+                  - relationships
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - locations
+                    id:
+                      type: string
+                      enum:
+                      - externalLocationId
+                    attributes:
+                      additionalProperties: false
+                      required:
+                      - name
+                      - address
+                      - email
+                      - hiringChance
+                      - minHoursAvailability
+                      - walkInTimes
+                      properties:
+                        name:
+                          type: string
+                        address:
+                          type: string
+                        addressDetails:
+                          type: object
+                          properties:
+                            country:
+                              type: string
+                            state:
+                              type: string
+                            postalCode:
+                              type: string
+                            city:
+                              type: string
+                            street:
+                              type: string
+                            streetNumber:
+                              type: string
+                        email:
+                          type: string
+                        hiringChance:
+                          type: integer
+                          format: int32
+                        walkInTimes:
+                          type: array
+                          items:
+                            properties:
+                              from:
+                                type: integer
+                                format: int64
+                              to:
+                                type: integer
+                                format: int64
+                              date:
+                                additionalProperties: false
+                                required:
+                                - day
+                                - month
+                                - year
+                                properties:
+                                  day:
+                                    type: number
+                                  month:
+                                    type: number
+                                  year:
+                                    type: number
+                        isActive:
+                          type: boolean
+                    relationships:
+                      additionalProperties: false
+                      required:
+                      - region
+                      - job-functions
+                      - location-specific-questions
+                      properties:
+                        region:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              properties:
+                                type:
+                                  type: string
+                                  example: regions
+                                id:
+                                  type: string
+                        job-functions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: job-functions
+                                  id:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    properties:
+                                      status:
+                                        type: string
+                                        enum:
+                                        - open
+                                        - closed
+                        location-specific-questions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: location-specific-questions
+                                  id:
+                                    type: string
+                                  language:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      question:
+                                        type: string
+                                      vacancy:
+                                        type: string
+      responses:
+        '200':
+          description: The updated Location
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - locations
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - name
+                          - address
+                          - externalId
+                          - hiringChance
+                          - minHoursAvailability
+                          - walkInTimes
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                            addressDetails:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                city:
+                                  type: string
+                                street:
+                                  type: string
+                                streetNumber:
+                                  type: string
+                            email:
+                              type: string
+                              nullable: true
+                            externalId:
+                              type: string
+                              nullable: true
+                            hiringChance:
+                              type: integer
+                              format: int32
+                            walkInTimems:
+                              type: array
+                              items:
+                                properties:
+                                  from:
+                                    type: integer
+                                    format: int64
+                                  to:
+                                    type: integer
+                                    format: int64
+                            isActive:
+                              type: boolean
+                        relationships:
+                          required:
+                          - region
+                          - job-functions
+                          - location-specific-questions
+                          properties:
+                            region:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                            job-functions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: job-functions
+                                      id:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        properties:
+                                          status:
+                                            type: string
+                                            enum:
+                                            - open
+                                            - closed
+                            location-specific-questions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: location-specific-questions
+                                      id:
+                                        type: string
+                                      language:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          question:
+                                            type: string
+                                          vacancy:
+                                            type: string
+  /accounts/{accountId}/locations/ext-{externalLocationId}:
+    get:
+      summary: Return a location by external location ID
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: externalLocationId
+        schema:
+          type: string
+        required: true
+        description: ID of the External Location to consider
+      responses:
+        '200':
+          description: The requested location
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - locations
+                        id:
+                          type: string
+                        attributes:
+                          required:
+                          - name
+                          - address
+                          - externalId
+                          - hiringChance
+                          - minHoursAvailability
+                          - walkInTimes
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                            addressDetails:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                city:
+                                  type: string
+                                street:
+                                  type: string
+                                streetNumber:
+                                  type: string
+                            email:
+                              type: string
+                              nullable: true
+                            externalId:
+                              type: string
+                              nullable: true
+                            hiringChance:
+                              type: integer
+                              format: int32
+                            walkInTimems:
+                              type: array
+                              items:
+                                properties:
+                                  from:
+                                    type: integer
+                                    format: int64
+                                  to:
+                                    type: integer
+                                    format: int64
+                            isActive:
+                              type: boolean
+                        relationships:
+                          required:
+                          - region
+                          - job-functions
+                          - location-specific-questions
+                          properties:
+                            region:
+                              additionalProperties: false
+                              properties:
+                                data:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                            job-functions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: job-functions
+                                      id:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        properties:
+                                          status:
+                                            type: string
+                                            enum:
+                                            - open
+                                            - closed
+                            location-specific-questions:
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: location-specific-questions
+                                      id:
+                                        type: string
+                                      language:
+                                        type: string
+                                      attributes:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          question:
+                                            type: string
+                                          vacancy:
+                                            type: string
+    patch:
+      summary: Update a Location based on external location
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: externalLocationId
+        schema:
+          type: string
+        required: true
+        description: ID of the External Location to consider
+      requestBody:
+        description: Location object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - id
+                  - type
+                  - attributes
+                  - relationships
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - locations
+                    id:
+                      type: string
+                      enum:
+                      - externalLocationId
+                    attributes:
+                      additionalProperties: false
+                      required:
+                      - name
+                      - address
+                      - email
+                      - hiringChance
+                      - minHoursAvailability
+                      - walkInTimes
+                      properties:
+                        name:
+                          type: string
+                        address:
+                          type: string
+                        addressDetails:
+                          type: object
+                          properties:
+                            country:
+                              type: string
+                            state:
+                              type: string
+                            postalCode:
+                              type: string
+                            city:
+                              type: string
+                            street:
+                              type: string
+                            streetNumber:
+                              type: string
+                        email:
+                          type: string
+                        hiringChance:
+                          type: integer
+                          format: int32
+                        walkInTimes:
+                          type: array
+                          items:
+                            properties:
+                              from:
+                                type: integer
+                                format: int64
+                              to:
+                                type: integer
+                                format: int64
+                              date:
+                                additionalProperties: false
+                                required:
+                                - day
+                                - month
+                                - year
+                                properties:
+                                  day:
+                                    type: number
+                                  month:
+                                    type: number
+                                  year:
+                                    type: number
+                        isActive:
+                          type: boolean
+                    relationships:
+                      additionalProperties: false
+                      required:
+                      - region
+                      - job-functions
+                      - location-specific-questions
+                      properties:
+                        region:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              properties:
+                                type:
+                                  type: string
+                                  example: regions
+                                id:
+                                  type: string
+                        job-functions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: job-functions
+                                  id:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    properties:
+                                      status:
+                                        type: string
+                                        enum:
+                                        - open
+                                        - closed
+                        location-specific-questions:
+                          additionalProperties: false
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                properties:
+                                  type:
+                                    type: string
+                                    example: location-specific-questions
+                                  id:
+                                    type: string
+                                  language:
+                                    type: string
+                                  attributes:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      question:
+                                        type: string
+                                      vacancy:
+                                        type: string
+      responses:
+        '204':
+          description: Location updated
+  /accounts/{accountId}/regions:
+    get:
+      summary: Returns all Regions
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: List of Regions
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - regions
+                        id:
+                          type: string
+                        attributes:
+                          additionalProperties: false
+                          required:
+                          - name
+                          properties:
+                            name:
+                              type: string
+    post:
+      summary: Create a new Region in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      requestBody:
+        description: Region that needs to be added to the Account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - type
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - regions
+                    attributes:
+                      properties:
+                        name:
+                          type: string
+      responses:
+        '200':
+          description: The created Region's name and ID
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: regions
+                      id:
+                        type: string
+                      attributes:
+                        additionalProperties: false
+                        properties:
+                          name:
+                            type: string
+  /accounts/{accountId}/regions/{regionId}:
+    patch:
+      summary: Update a Region in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: regionId
+        schema:
+          type: string
+        required: true
+        description: ID of the Region to consider
+      requestBody:
+        description: Region that needs to be updated in the Account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - type
+                  - id
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - regions
+                    id:
+                      type: string
+                    attributes:
+                      properties:
+                        name:
+                          type: string
+      responses:
+        '200':
+          description: The updated Region's name and ID
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: regions
+                      id:
+                        type: string
+                      attributes:
+                        additionalProperties: false
+                        properties:
+                          name:
+                            type: string
+  /accounts/{accountId}/users/{userProfileId}:
+    get:
+      summary: Returns location information and the attributes of a User in an Account
+      description: "#### Supported includes:\n- `location`\n- `region`\n\n#### Example query:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/{accountId}/users/{userId}?include=locations,regions' \\\n      -H 'Authorization: Bearer ...'\n"
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: path
+        name: userProfileId
+        schema:
+          type: string
+        required: true
+        description: ID of userProfile
+      responses:
+        '200':
+          description: An object of Account user information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                    properties:
+                      type:
+                        type: string
+                        example: account-users
+                      id:
+                        type: string
+                      attributes:
+                        properties:
+                          role:
+                            type: string
+                            enum:
+                            - super-user
+                            - account-admin
+                            - recruiter
+                          candidatesPiiAllowed:
+                            type: boolean
+                          createdAt:
+                            type: integer
+                            format: int64
+                      relationships:
+                        additionalProperties: false
+                        properties:
+                          account:
+                            type: object
+                            properties:
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: accounts
+                                  id:
+                                    type: string
+                          locations:
+                            type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: locations
+                                    id:
+                                      type: string
+                          regions:
+                            type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: regions
+                                    id:
+                                      type: string
+                  included:
+                    type: array
+                    items:
+                      allOf:
+                      - required:
+                        - id
+                        - type
+                        - attributes
+                        - relationships
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - locations
+                          id:
+                            type: string
+                          attributes:
+                            additionalProperties: false
+                            required:
+                            - name
+                            - address
+                            - email
+                            - hiringChance
+                            - minHoursAvailability
+                            - walkInTimes
+                            properties:
+                              name:
+                                type: string
+                              address:
+                                type: string
+                              email:
+                                type: string
+                              hiringChance:
+                                type: integer
+                                format: int32
+                              walkInTimems:
+                                type: array
+                                items:
+                                  properties:
+                                    from:
+                                      type: integer
+                                      format: int64
+                                    to:
+                                      type: integer
+                                      format: int64
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: regions
+                          id:
+                            type: string
+                          attributes:
+                            additionalProperties: false
+                            properties:
+                              name:
+                                type: string
+  /accounts/{accountId}/job-functions:
+    get:
+      summary: Returns all Job functions in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: An array of Job functions
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 1
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        type:
+                          type: string
+                          example: job-functions
+                        id:
+                          type: string
+                        attributes:
+                          properties:
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            minAge:
+                              type: integer
+                              format: int32
+    post:
+      summary: Create a new Job Function in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      requestBody:
+        description: Job function that needs to be added to the Account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  required:
+                  - type
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - job-functions
+                    attributes:
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        minAge:
+                          type: number
+                        image:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                            placeHolder:
+                              type: string
+                            value:
+                              type: string
+      responses:
+        '200':
+          description: The created Job Function's name and ID
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: job-functions
+                      id:
+                        type: string
+                      attributes:
+                        additionalProperties: false
+                        properties:
+                          title:
+                            type: string
+                          description:
+                            type: string
+                          minAge:
+                            type: number
+  /accounts/{accountId}/email-templates:
+    get:
+      summary: Returns all Email Templates in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: An array of email templates
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 1
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        type:
+                          type: string
+                          example: email-templates
+                        id:
+                          type: string
+                        attributes:
+                          properties:
+                            status:
+                              type: string
+                              example: NEW
+                            template:
+                              type: object
+                              properties:
+                                IT:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+                                ES:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+                                DE:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+                                FR:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+                                NL:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+                                ENG:
+                                  type: object
+                                  properties:
+                                    content:
+                                      type: string
+                                    subject:
+                                      type: string
+  /accounts/{accountId}/jobboard:
+    get:
+      summary: Returns Job board details
+      description: "To obtain the list of Job board vacancies and their locations and job-functions details, perform a `GET` operation to the `/accounts/<account-id>/jobboard` endpoint.\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[vacancy]`\n- `filter[language]`\n\nFor filtering by language, comma separated values can be used. Ex: `?filter[language]=<language1>,<language2>`\n#### Example query:\nTo fetch all job board vacancies of account `<testAccountId>`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>` and filter by language `ENG`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>&filter[language]=EN' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>` and filter by language `ENG` and `NL`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>&filter[language]=ENG,NL' \\\n      -H 'Authorization: Bearer ...'\n"
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      - in: query
+        name: filter
+        description: Vacancy and Location filter
+        schema:
+          type: object
+          properties:
+            vacancy:
+              type: string
+            language:
+              type: string
+              enum:
+              - ENG
+              - NL
+              - DE
+              - FR
+              - IT
+              - ES
+      responses:
+        '200':
+          description: Vacancies in job board
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - data
+                - included
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        type:
+                          type: string
+                          example: jobboard
+                        id:
+                          type: string
+                        attributes:
+                          type: object
+                          properties:
+                            language:
+                              type: string
+                              example: ENG
+                            link:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
+                        relationships:
+                          type: object
+                          properties:
+                            location:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: locations
+                                    id:
+                                      type: string
+                            jobFunction:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: job-functions
+                                    id:
+                                      type: string
+                            vacancy:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: vacancies
+                                    id:
+                                      type: string
+                  included:
+                    type: array
+                    items:
+                      allOf:
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: locations
+                          id:
+                            type: string
+                          attributes:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              address:
+                                type: string
+                              addressDetails:
+                                type: object
+                                properties:
+                                  country:
+                                    type: string
+                                  state:
+                                    type: string
+                                  postalCode:
+                                    type: string
+                                  city:
+                                    type: string
+                                  street:
+                                    type: string
+                                  streetNumber:
+                                    type: string
+                                  latitude:
+                                    type: string
+                                  longitude:
+                                    type: string
+                              externalId:
+                                type: string
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: job-functions
+                          id:
+                            type: string
+                          attributes:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            example: vacancies
+                          id:
+                            type: string
+                          attributes:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+  /accounts/{accountId}/rejectionReasons:
+    get:
+      summary: Returns all Rejection reasons in an Account
+      tags:
+      - accounts
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+        description: ID of the Account to consider
+      responses:
+        '200':
+          description: An array of rejection reasons
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                minProperties: 1
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        type:
+                          type: string
+                          example: rejection-reasons
+                        id:
+                          type: string
+                        attributes:
+                          properties:
+                            name:
+                              type: string
