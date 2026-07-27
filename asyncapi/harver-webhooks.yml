@@ -1,0 +1,29 @@
+generated: '2026-07-19'
+method: searched
+source: https://api.harver.com/docs#tag/webhook
+spec_type: Webhooks
+description: >-
+  Harver delivers events to a customer/ATS endpoint via webhooks. When a
+  subscribed event fires, Harver sends an HTTP POST payload to the configured
+  URL. The Harver integrations team configures webhooks per customer. Use the
+  Harver Application Id from the payload to fetch full application details via
+  GET /applications/{applicationId}.
+delivery:
+  transport: http-post
+  configuration: Configured per customer by the Harver integrations team.
+security:
+  supported: [NoAuth, BasicAuth]
+  notes: Webhook endpoints may be secured with HTTP Basic Auth (username & password) or left unauthenticated.
+events:
+- name: ApplicationStarted
+  description: A candidate registered at Harver.
+  candidate_status: in-progress
+- name: PersonalInfoWasCreated
+  description: A candidate filled in the "Personal information" module.
+  candidate_status: in-progress
+- name: AdditionalInfoWasUpdated
+  description: A candidate filled in the "Additional information" module.
+  candidate_status: in-progress
+- name: CandidateStatusNew
+  description: A candidate completed the Harver Journey.
+  candidate_status: new

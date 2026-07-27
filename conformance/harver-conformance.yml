@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: searched
+source: https://harver.com/security/ + openapi/harver-openapi-original.json
+standards:
+- id: oauth2
+  conforms: true
+  evidence: Authentication uses OAuth2 client_credentials at /oauth/token (docs).
+- id: oidc
+  conforms: false
+  evidence: No /.well-known/openid-configuration; /oauth/userinfo exists but no OIDC discovery.
+- id: json-api
+  conforms: partial
+  evidence: Resources use a JSON:API-style data/type/attributes/relationships envelope with include expansion and filter[] params.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom {statusCode,status,code,message,name} JSON envelope, not application/problem+json.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset/Deprecation header policy documented.
+- id: rate-limit-headers
+  conforms: true
+  evidence: Responses include Ratelimit-Limit and Ratelimit-Reset; 429 on exceed.
+compliance:
+- id: iso-27001
+  conforms: true
+  evidence: 'Security page: "compliant with the industry''s most rigorous security standards like ISO 27001".'
+- id: soc-2-type-2
+  conforms: true
+  evidence: 'Security page: "ISO 27001 and SOC 2 Type 2".'
+- id: gdpr
+  conforms: true
+  evidence: 'Security page: "We are GDPR and CCPA compliant".'
+- id: ccpa
+  conforms: true
+  evidence: 'Security page: GDPR and CCPA compliant.'
+- id: nyc-local-law-144
+  conforms: true
+  evidence: Bias audits for automated employment decision tools referenced on the security page.
+compliance_page: https://harver.com/security/

@@ -1,0 +1,93 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/harver-openapi-original.json + https://api.harver.com/docs
+description: >-
+  Entity-relationship graph for the Harver Public API, derived from the resource
+  paths, the JSON:API relationships in the documented payloads, and the
+  Definitions section of the docs. Harver models a hiring/assessment domain:
+  Accounts hold Vacancies; Candidates create Applications against Vacancies; a
+  Vacancy is powered by a Flow of assessment Modules that produce a matching score.
+entities:
+- name: Account
+  description: Holds all company-specific configuration; users manage settings, vacancies and flows.
+  path: /accounts/{accountId}
+- name: Vacancy
+  description: An open position within an Account; always connected to a Flow.
+  path: /vacancies/{vacancyId}
+- name: Flow
+  description: An ordered set of assessment modules and content connected to one or more Vacancies.
+  path: null
+- name: Module
+  description: A component of a Flow (personal-info form, personality questionnaire, multitasking test, etc.).
+  path: /vacancies/{vacancyId}/modules/{moduleId}
+- name: Candidate
+  description: A person who applied to one or more Vacancies.
+  path: /accounts/{accountId}/candidates/{candidateId}
+- name: Application
+  description: Created when a Candidate applies to a Vacancy; carries status, progress, matching score and reports.
+  path: /applications/{applicationId}
+- name: Location
+  description: A physical location within an Account (also addressable by external location id).
+  path: /accounts/{accountId}/locations/{locationId}
+- name: Region
+  description: A grouping of locations within an Account.
+  path: /accounts/{accountId}/regions/{regionId}
+- name: JobFunction
+  description: A job function defined within an Account.
+  path: /accounts/{accountId}/job-functions
+- name: User
+  description: A user profile within an Account.
+  path: /accounts/{accountId}/users/{userProfileId}
+- name: Note
+  description: A note attached to an Application.
+  path: /applications/{applicationId}/notes/{noteId}
+relationships:
+- from: Vacancy
+  type: belongs_to
+  to: Account
+  via: accountId
+- from: Candidate
+  type: belongs_to
+  to: Account
+  via: accountId
+- from: Application
+  type: belongs_to
+  to: Vacancy
+  via: vacancyId
+- from: Application
+  type: belongs_to
+  to: Candidate
+  via: candidate (relationships)
+- from: Vacancy
+  type: has_one
+  to: Flow
+  via: flow
+- from: Flow
+  type: has_many
+  to: Module
+  via: modules
+- from: Application
+  type: has_many
+  to: Note
+  via: notes
+- from: Vacancy
+  type: has_many
+  to: Location
+  via: locations
+- from: Vacancy
+  type: has_many
+  to: Region
+  via: regions
+- from: Region
+  type: has_many
+  to: Location
+  via: locations
+- from: Location
+  type: belongs_to
+  to: Account
+  via: accountId
+key_fields:
+  Application:
+  - {field: status, values: [in-progress, new, hired, rejected]}
+  - {field: matchingScore, type: integer, range: 0-100}
+  - {field: matchingProfile.label, description: configurable score band/label}

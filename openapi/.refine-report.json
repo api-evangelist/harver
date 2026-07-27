@@ -1,0 +1,30 @@
+{
+  "provider": "harver",
+  "sources": [
+    "harver-accounts-api-openapi.yml",
+    "harver-applications-api-openapi.yml",
+    "harver-candidate-statuses-api-openapi.yml",
+    "harver-candidateapplications-api-openapi.yml",
+    "harver-oauth-api-openapi.yml",
+    "harver-scheduling-api-openapi.yml",
+    "harver-user-profile-api-openapi.yml",
+    "harver-vacancies-api-openapi.yml",
+    "harver-webhook-api-openapi.yml"
+  ],
+  "outputs": [
+    "harver-accounts-api-openapi.yml",
+    "harver-applications-api-openapi.yml",
+    "harver-candidate-statuses-api-openapi.yml",
+    "harver-candidateapplications-api-openapi.yml",
+    "harver-oauth-api-openapi.yml",
+    "harver-scheduling-api-openapi.yml",
+    "harver-user-profile-api-openapi.yml",
+    "harver-vacancies-api-openapi.yml",
+    "harver-webhook-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

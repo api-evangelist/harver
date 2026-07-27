@@ -1,0 +1,53 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/harver-openapi-original.json
+format: custom-json
+envelope:
+  content_type: application/json
+  fields:
+  - {name: statusCode, type: integer}
+  - {name: status, type: integer}
+  - {name: code, type: integer}
+  - {name: message, type: string}
+  - {name: name, type: string}
+notes: >-
+  Harver returns errors in a custom JSON envelope (not RFC 9457 problem+json and
+  not a JSON:API errors array). Derived from the 4xx/5xx responses declared
+  across the OpenAPI. Rate-limit rejections return HTTP 429 (see
+  conventions/harver-conventions.yml).
+problems:
+- status: 400
+  title: Bad Request
+  description: Validation error
+  remediation: Check request body/parameters against the operation schema.
+  example_operations: [POST /oauth/token, POST /oauth/authenticate, POST /oauth/userinfo]
+- status: 401
+  title: Unauthorized
+  description: Invalid or expired token
+  remediation: Obtain a fresh Bearer token from /oauth/token (tokens expire after 1 hour).
+  example_operations: [POST /oauth/userinfo, 'GET /applications/{applicationId}/reports/reports-hub']
+- status: 403
+  title: Forbidden
+  description: Forbidden error
+  remediation: The credentials lack access rights to the requested account/resource.
+  example_operations: ['PATCH /vacancies/{vacancyId}/locations-v2', 'PATCH /vacancies/{vacancyId}/regions']
+- status: 404
+  title: Not Found
+  description: Not Found error
+  remediation: Verify the resource id (account, vacancy, application, location) exists.
+  example_operations: ['PATCH /vacancies/{vacancyId}/locations-v2', 'GET /applications/{applicationId}/reapply/status']
+- status: 409
+  title: Conflict
+  description: Resource state conflict (e.g. device status already disabled)
+  remediation: The resource is already in the target state or conflicts with an existing record.
+  example_operations: [POST /me/notifications/devices]
+- status: 429
+  title: Too Many Requests
+  description: Rate limit exceeded
+  remediation: Back off using Ratelimit-Reset; default limits 450/min (prod), 300/min (test).
+  example_operations: [all]
+- status: 500
+  title: Internal Server Error
+  description: Any other errors
+  remediation: Retry; if persistent, contact support with the X-Correlation-Id.
+  example_operations: ['PATCH /vacancies/{vacancyId}/locations', 'PATCH /vacancies/{vacancyId}/regions']

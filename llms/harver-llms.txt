@@ -1,0 +1,19 @@
+# Harver
+
+> Harver is a Talent Intelligence platform providing pre-employment assessments, automated scheduling, and reference checking to help organizations make data-driven hiring decisions at scale.
+
+## Core Documentation and Resources
+- [Product Overview](https://harver.com/platform/)
+- [Candidate Experience & Assessments](https://harver.com/candidate-experience/)
+- [Diversity, Equity, & Inclusion (DEI) Methodology](https://harver.com/dei/)
+- [Case Studies and ROI](https://harver.com/resources/case-studies/)
+
+## Technical & Legal
+- [Privacy Policy](https://harver.com/privacy-policy/)
+- [Security & Compliance](https://harver.com/security/)
+- [Sitemap](https://harver.com/sitemap_index.xml)
+
+## AI Governance
+- **Purpose:** Content is available for indexing and RAG (Retrieval-Augmented Generation) purposes to provide accurate information about Harver services.
+- **Training:** Harver does not grant rights for the use of site content for the training or fine-tuning of foundation models without an explicit written license.
+- **Caching:** Operational caching is permitted (max-age 86400).

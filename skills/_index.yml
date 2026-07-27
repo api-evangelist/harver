@@ -1,0 +1,16 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/harver-openapi-original.json + conventions/harver-conventions.yml
+skills:
+- file: harver-submit-candidate-application.md
+  name: Submit a candidate and create an application
+  api: openapi/harver-openapi-original.json
+  operations: [POST /oauth/token, 'POST /vacancies/{vacancyId}/applications']
+- file: harver-retrieve-application-results.md
+  name: Retrieve an application's results and reports
+  api: openapi/harver-openapi-original.json
+  operations: [POST /oauth/token, 'GET /applications/{applicationId}', 'GET /applications/{applicationId}/reports/reports-hub']
+- file: harver-poll-new-candidates.md
+  name: Poll a vacancy for newly completed candidates
+  api: openapi/harver-openapi-original.json
+  operations: [POST /oauth/token, 'GET /vacancies/{vacancyId}/candidates', 'GET /applications/{applicationId}']

@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+source: https://api.harver.com/docs
+description: >-
+  Harver provides a dedicated TEST environment for the development phase,
+  separate from Production. Access keys, client_id/client_secret and Account IDs
+  are provisioned per environment by Harver (the API is customer-only), so no
+  shared/self-serve test credentials or magic test values are published.
+environments:
+- name: Test
+  base_url: https://api.harver-test.com
+  token_url: https://api.harver-test.com/oauth/token
+  candidate_domain: https://harver-test.com
+  purpose: Recommended for development and integration testing.
+  default_rate_limit: 300 requests/minute
+- name: Production
+  base_url: https://api.harver.com
+  token_url: https://api.harver.com/oauth/token
+  default_rate_limit: 450 requests/minute
+credentials:
+  provisioning: Provided by Harver per environment (client_id + client_secret + Account ID).
+  self_serve: false
+test_values:
+  published: false
+  notes: No magic test identifiers or fixture tokens are published in the public docs.

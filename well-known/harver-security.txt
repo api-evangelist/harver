@@ -1,0 +1,27 @@
+Contact: mailto:globalsecurity@harver.com
+Expires: 2027-01-31T17:59:00.000Z
+Preferred-Languages: en
+Canonical: https://harver.com/.well-known/security.txt
+Hiring: https://harver.com/careers
+
+# --- For Humans ---
+# We take the security of Harver customers, employees, code, software, and infrastructure very seriously. If you believe you have found 
+# a security vulnerability in one of the Harver family of platforms, we encourage you to responsibly disclose it to us. We will 
+# investigate, triage, and remediate confirmed issues in accordance with our established vulnerability management standard. 
+# 
+# --- Responsible Disclosure ---
+# * Privately report vulnerabilities and security issues to globalsecurity@harver.com
+# * Provide enough details to reproduce the vulnerability you are reporting
+# 
+# --- Prohibited Actions ---
+# * Disclosing any details of the vulnerability or security issue identified either publicly or to third parties
+# * Exploiting a vulnerability or security issue beyond what is strictly necessary to verify its existence
+# * Running automated security tools against any Harver infrastructure or applications without previous written permission
+# 
+# --- Harver Will ---
+# * Acknowledge your report within 3 business days of communication
+# * Review and validate reported issues and, where appropriate, remediate them in alignment with our vulnerability management standard
+# * Handle the report, your information, and any other information shared with us with strict confidentiality
+# 
+# Please note that Harver does not currently have a bug bounty program or offer any formal rewards for reporting vulnerabilities. 
+# --- END ---

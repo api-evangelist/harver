@@ -1,0 +1,172 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/harver-openapi-original.json
+notes: Candidate MCP tool list derived one-per-operation from the Harver Public API OpenAPI (no official
+  hosted MCP server found). Not published by Harver.
+server:
+  name: harver
+  transport: stdio
+tools:
+- name: create_oauth_token
+  description: Start an authorized session
+  source_operation: openapi/harver-openapi-original.json#POST /oauth/token
+- name: create_oauth_authenticate
+  description: Validate auth token
+  source_operation: openapi/harver-openapi-original.json#POST /oauth/authenticate
+- name: create_oauth_userinfo
+  description: Get identity claims for a user
+  source_operation: openapi/harver-openapi-original.json#POST /oauth/userinfo
+- name: get_accounts
+  description: Returns all the available Accounts based on the access rights
+  source_operation: openapi/harver-openapi-original.json#GET /accounts
+- name: get_accounts_candidates
+  description: Returns all Candidates of an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/candidates
+- name: get_accounts_candidates_applications
+  description: Returns all Applications of a Candidate in an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/candidates/{candidateId}/applications
+- name: get_accounts_vacancies
+  description: Returns all Vacancies of an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/vacancies
+- name: get_accounts_channels_vacancies
+  description: Returns all vacancies of an Account in a specific Channel
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/channels/{channelId}/vacancies
+- name: get_accounts_location_specific_questions
+  description: Returns all Location specific questions
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/location-specific-questions
+- name: get_accounts_locations
+  description: Returns all Locations of an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/locations
+- name: create_accounts_locations
+  description: Create a Location
+  source_operation: openapi/harver-openapi-original.json#POST /accounts/{accountId}/locations
+- name: get_accounts_locations_2
+  description: Return a location by location ID
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/locations/{locationId}
+- name: update_accounts_locations
+  description: Update a Location
+  source_operation: openapi/harver-openapi-original.json#PATCH /accounts/{accountId}/locations/{locationId}
+- name: get_accounts_locations_3
+  description: Return a location by external location ID
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/locations/ext-{externalLocationId}
+- name: update_accounts_locations_2
+  description: Update a Location based on external location
+  source_operation: openapi/harver-openapi-original.json#PATCH /accounts/{accountId}/locations/ext-{externalLocationId}
+- name: get_accounts_regions
+  description: Returns all Regions
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/regions
+- name: create_accounts_regions
+  description: Create a new Region in an Account
+  source_operation: openapi/harver-openapi-original.json#POST /accounts/{accountId}/regions
+- name: update_accounts_regions
+  description: Update a Region in an Account
+  source_operation: openapi/harver-openapi-original.json#PATCH /accounts/{accountId}/regions/{regionId}
+- name: get_accounts_users
+  description: Returns location information and the attributes of a User in an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/users/{userProfileId}
+- name: get_accounts_job_functions
+  description: Returns all Job functions in an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/job-functions
+- name: create_accounts_job_functions
+  description: Create a new Job Function in an Account
+  source_operation: openapi/harver-openapi-original.json#POST /accounts/{accountId}/job-functions
+- name: get_accounts_email_templates
+  description: Returns all Email Templates in an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/email-templates
+- name: get_accounts_jobboard
+  description: Returns Job board details
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/jobboard
+- name: get_accounts_rejectionreasons
+  description: Returns all Rejection reasons in an Account
+  source_operation: openapi/harver-openapi-original.json#GET /accounts/{accountId}/rejectionReasons
+- name: create_vacancies_applications
+  description: Create a Candidate and Application in an Account
+  source_operation: openapi/harver-openapi-original.json#POST /vacancies/{vacancyId}/applications
+- name: get_vacancies_candidates
+  description: Returns all Candidates of a Vacancy
+  source_operation: openapi/harver-openapi-original.json#GET /vacancies/{vacancyId}/candidates
+- name: get_vacancies_modules
+  description: Returns the module settings of a Vacancy
+  source_operation: openapi/harver-openapi-original.json#GET /vacancies/{vacancyId}/modules/{moduleId}
+- name: get_vacancies
+  description: Find vacancy by id
+  source_operation: openapi/harver-openapi-original.json#GET /vacancies/{vacancyId}
+- name: update_vacancies
+  description: Update a Vacancy Status
+  source_operation: openapi/harver-openapi-original.json#PATCH /vacancies/{vacancyId}
+- name: update_vacancies_locations
+  description: Updates locations of a vacancy
+  source_operation: openapi/harver-openapi-original.json#PATCH /vacancies/{vacancyId}/locations
+- name: update_vacancies_locations_v2
+  description: Updates attached locations of a vacancy
+  source_operation: openapi/harver-openapi-original.json#PATCH /vacancies/{vacancyId}/locations-v2
+- name: update_vacancies_regions
+  description: Updates attached regions of a vacancy
+  source_operation: openapi/harver-openapi-original.json#PATCH /vacancies/{vacancyId}/regions
+- name: get_applications
+  description: Returns application ids
+  source_operation: openapi/harver-openapi-original.json#GET /applications
+- name: get_applications_2
+  description: Returns the details of an Application
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}
+- name: update_applications
+  description: Update an Application
+  source_operation: openapi/harver-openapi-original.json#PATCH /applications/{applicationId}
+- name: delete_applications
+  description: Delete an application using applicationId
+  source_operation: openapi/harver-openapi-original.json#DELETE /applications/{applicationId}
+- name: get_applications_notes
+  description: Returns the Application Notes
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}/notes
+- name: create_applications_notes
+  description: Add a Note to an Application
+  source_operation: openapi/harver-openapi-original.json#POST /applications/{applicationId}/notes
+- name: delete_applications_notes
+  description: Delete a Note from the Application
+  source_operation: openapi/harver-openapi-original.json#DELETE /applications/{applicationId}/notes/{noteId}
+- name: update_applications_ats_parameters
+  description: Update ats parameters
+  source_operation: openapi/harver-openapi-original.json#PATCH /applications/{applicationId}/ats-parameters
+- name: update_applications_locations
+  description: Add locations to an application
+  source_operation: openapi/harver-openapi-original.json#PATCH /applications/{applicationId}/locations
+- name: update_applications_locations_2
+  description: Update application status per external location
+  source_operation: openapi/harver-openapi-original.json#PATCH /applications/{applicationId}/locations/ext-{externalLocationId}
+- name: update_applications_locations_3
+  description: Update application status per location
+  source_operation: openapi/harver-openapi-original.json#PATCH /applications/{applicationId}/locations/{locationId}
+- name: get_applications_reapply_status
+  description: Retrieves the re-apply status of a candidate
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}/reapply/status
+- name: get_applications_reports_development_reports
+  description: Retrieves a link to access development report
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}/reports/development-reports
+- name: get_applications_reports_interview_guides
+  description: Retrieves a link to access interview guide
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}/reports/interview-guides
+- name: get_applications_reports_reports_hub
+  description: Retrieves a Reports Hub magic link for an application
+  source_operation: openapi/harver-openapi-original.json#GET /applications/{applicationId}/reports/reports-hub
+- name: get_candidate_statuses
+  description: Returns the available candidate statuses
+  source_operation: openapi/harver-openapi-original.json#GET /candidate-statuses
+- name: get_me
+  description: Returns the User profile details
+  source_operation: openapi/harver-openapi-original.json#GET /me
+- name: create_me_notifications_devices
+  description: Manages push notifications of devices
+  source_operation: openapi/harver-openapi-original.json#POST /me/notifications/devices
+- name: update_me_notifications
+  description: Manages push notification types of devices
+  source_operation: openapi/harver-openapi-original.json#PATCH /me/notifications
+- name: create_scheduling
+  description: Schedule an interview and retrieve the scheduling link
+  source_operation: openapi/harver-openapi-original.json#POST /scheduling/{accountId}
+- name: get_scheduling_interview_details
+  description: Returns the details of an Interview
+  source_operation: openapi/harver-openapi-original.json#GET /scheduling/{accountId}/interview-details/{candidateId}
+- name: create_webhookpath
+  description: Trigger webhook for the given client URL
+  source_operation: openapi/harver-openapi-original.json#POST /webhookPath

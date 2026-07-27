@@ -1,0 +1,74 @@
+generated: '2026-07-19'
+method: searched
+source: https://api.harver.com/docs
+description: >-
+  Cross-cutting request/response semantics for the Harver Public API, captured
+  from the published documentation and derived from the OpenAPI. Harver models
+  resources in a JSON:API-style envelope (data / type / attributes /
+  relationships) with sparse-fieldset style include expansion and filter-based
+  querying.
+authentication:
+  style: oauth2-bearer
+  flow: client_credentials
+  header: 'Authorization: Bearer {access_token}'
+  see: authentication/harver-authentication.yml
+versioning:
+  scheme: uri-path
+  current: v1.0
+  base_path: /api/v1.0/
+  spec_version: 1.37.0
+idempotency:
+  supported: false
+  notes: >-
+    No idempotency-key header or param is documented. Re-submitting an
+    application create (POST /vacancies/{vacancyId}/applications) with the same
+    candidate email returns the same applicationId with a renewed magic-link,
+    which is idempotent by natural key but not via an idempotency contract.
+pagination:
+  style: filter-based
+  notes: >-
+    List endpoints (e.g. GET /vacancies/{vacancyId}/candidates) are queried with
+    JSON:API-style filter parameters rather than cursor/offset pagination.
+  filter_params:
+  - filter[status]
+  - filter[status-updated-at][since]
+  - filter[status-updated-at][until]
+  - filter[locations]
+  - filter[region]
+  - filter[external_location_id]
+  - filter[job_function]
+  - filter[skip_aggregration]
+expansion:
+  style: json-api-include
+  param: include
+  example: '?include=report,matching-results,personal-info,additional-info,ats,matching-indicators'
+  modules:
+  - personal-info
+  - additional-info
+  - ats
+  - report
+  - matching-results
+  - matching-indicators
+request_tracing:
+  header: X-Correlation-Id
+  direction: response
+  notes: Include this ID when submitting a support request.
+rate_limiting:
+  signaled: true
+  status_code: 429
+  default_limits:
+    production: 450 requests/minute
+    test: 300 requests/minute
+  headers:
+  - name: Ratelimit-Limit
+    meaning: The request limit for the time period
+  - name: Ratelimit-Reset
+    meaning: The time remaining in the current window, in seconds
+error_envelope:
+  format: custom-json
+  fields: [statusCode, status, code, message, name]
+  content_type: application/json
+  see: errors/harver-problem-types.yml
+resource_envelope:
+  style: json-api
+  fields: [data, type, id, attributes, relationships, included]

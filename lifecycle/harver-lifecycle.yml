@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: searched
+source: https://api.harver.com/docs
+versioning:
+  scheme: uri-path
+  current: v1.0
+  base_path: /api/v1.0/
+  spec_version: 1.37.0
+  docs: https://api.harver.com/docs
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No formal deprecation/Sunset (RFC 8594) policy is published. Two endpoint
+    generations coexist in the spec (e.g. /vacancies/{vacancyId}/locations and
+    /vacancies/{vacancyId}/locations-v2), indicating versioned-in-place
+    evolution rather than dated deprecation.
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: https://status.harver.com
+  provider: statuspage.io
+  state: inactive
+  notes: >-
+    A Statuspage.io page exists at status.harver.com but currently renders as
+    "Page Inactive"; no active public status page is being served, so no
+    StatusPage rating pointer is emitted.
+availability:
+  environments:
+  - {name: Production, base_url: https://api.harver.com}
+  - {name: Test, base_url: https://api.harver-test.com}
+deprecated_operations: []
