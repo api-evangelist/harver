@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts candidateApplications API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "candidateApplications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a Candidate and Application in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To create a new application in Harver Platform, perform a `POST` operation to the `/vacancies/<vacancy-id>/applications` endpoint. The response provides a magic link to complete a candidate journey in Harver Platform. The magic link is generated for a new or an existing applicant.\n\nIf the candidate already applied for the vacancy in Harver, the magic link for that application will be returned.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -170,3 +170,9 @@ tools:
 - name: create_webhookpath
   description: Trigger webhook for the given client URL
   source_operation: openapi/harver-openapi-original.json#POST /webhookPath
+deployment:
+  mode: none
+  verified: derived
+  tools: 54
+  checked: '2026-08-12'
+  source: catalog MCP census

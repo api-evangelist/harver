@@ -1,0 +1,381 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts applications API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "applications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns application ids",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "The account to look for"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "The filter to apply"
+              }
+            ]
+          },
+          "docs": "\nGet harver application ids based on ats-parameters or search by vacancy and email.\n- filter[atsParameters]\nor\n- filter[applicationMeta]\n\n#### Important!!\n\nTo improve the search of applications using atsParameters, the endpoint has been limited to search applications using standardized parameters only. Below is the list of standardized parameters.\n\n- application_id\n- candidate_id\n- country\n- id\n- location\n- source\n- vacancy_id\n\nApart from these, harver provides another 5 customizable standard at"
+        },
+        {
+          "info": {
+            "name": "Returns the details of an Application",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "The include to apply for relationship data. Use comma separated values for include"
+              }
+            ]
+          },
+          "docs": "### IMPORTANT\nAvoid using all the `include` criteria, unless all modules are enabled in your account. Use `include` criteria for the modules activated in your account.\n## Retrieving relationship data\nTo retrieve an Application's relationship data (such as a PDF report, submitted resume etc.), you can make a basic GET `applications/{applicationId}`, while also providing the `include` parameter. This parameter represents 'a list of comma-separated includes', which are to be included in the respons"
+        },
+        {
+          "info": {
+            "name": "Update an Application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an Application"
+        },
+        {
+          "info": {
+            "name": "Delete an application using applicationId",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ]
+          },
+          "docs": "To delete an application, the requesting user should have access to the account and the vacancy which the application resides.\nAlso the user should be an admin in the account to delete the application\n"
+        },
+        {
+          "info": {
+            "name": "Returns the Application Notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/notes",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ]
+          },
+          "docs": "Returns the Application Notes"
+        },
+        {
+          "info": {
+            "name": "Add a Note to an Application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/notes",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a Note to an Application"
+        },
+        {
+          "info": {
+            "name": "Delete a Note from the Application",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/notes/:noteId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Note to consider"
+              }
+            ]
+          },
+          "docs": "Delete a Note from the Application"
+        },
+        {
+          "info": {
+            "name": "Update ats parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/ats-parameters",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint to update the 'ATS Parameters' for a candidate application\n"
+        },
+        {
+          "info": {
+            "name": "Add locations to an application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/locations",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint to add locations to a candidate application\n"
+        },
+        {
+          "info": {
+            "name": "Update application status per external location",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/locations/ext-:externalLocationId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "externalLocationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the External Location to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint to update the 'status' per external location for a candidate application\n\nWhen changing the status to 'HIRED', the job function ID can be sent in the request body (optional attribute).\n"
+        },
+        {
+          "info": {
+            "name": "Update application status per location",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/locations/:locationId",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "locationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Location to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint to update the 'status' per location for a candidate application\n\nWhen changing the status to 'HIRED', the job function ID can be sent in the request body (optional attribute).\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves the re-apply status of a candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/reapply/status",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              }
+            ]
+          },
+          "docs": "This endpoint checks whether a candidate is eligible for re-applying. The re-apply status is retrieved using the `applicationId` path parameter. If a candidate is not found, 404 is returned.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a link to access development report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/reports/development-reports",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "The locales to consider"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a link to access the development report. The development report can be searched with the `applicationId` and `locale` query parameter.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a link to access interview guide",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/reports/interview-guides",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "extendedValidity",
+                "value": "",
+                "type": "query",
+                "description": "The extended validity to apply. if this is passed 2 months will be set as the validity period for the document"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a link to access the interview guide.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a Reports Hub magic link for an application",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/applications/:applicationId/reports/reports-hub",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Application to consider ([0-9a-f]{24})"
+              },
+              {
+                "name": "expiresIn",
+                "value": "",
+                "type": "query",
+                "description": "Link expiration time in seconds. Must be between 2 weeks (1209600) and 1 year (31536000)."
+              },
+              {
+                "name": "allowedPII",
+                "value": "",
+                "type": "query",
+                "description": "Controls whether PII (name, email, phone) is visible in the Reports Hub. This value is embedded in the token at issuance time."
+              }
+            ]
+          },
+          "docs": "This endpoint generates a magic link to access the Reports Hub for the given application. The link is valid for the specified expiration time and controls whether PII (name, email, phone) is visible.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

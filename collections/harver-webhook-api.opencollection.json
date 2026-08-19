@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts webhook API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "webhook",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Trigger webhook for the given client URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/webhookPath"
+          },
+          "docs": "Harver dev team can configure the webhooks for you\n\n  _Available events_\n\n  - ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n  - PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n  - AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n  - CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

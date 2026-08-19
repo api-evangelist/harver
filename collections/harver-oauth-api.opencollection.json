@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts oauth API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "oauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start an authorized session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/oauth/token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "client_id",
+                  "value": ""
+                },
+                {
+                  "name": "client_secret",
+                  "value": ""
+                },
+                {
+                  "name": "grant_type",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Content-Type should be set to **application/x-www-form-urlencoded**\n## Obtaining Tokens\nTo obtain API tokens for any of your client applications, perform a POST operation to the `/oauth/token` endpoint with a payload in the following format\n## Using client_credentials\nThis type of authorization is used when applications require access to access their own resources, and is not done on behalf of a user. For instance, an Applicant Tracking System checking whether there are new applicants that have "
+        },
+        {
+          "info": {
+            "name": "Validate auth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/oauth/authenticate"
+          },
+          "docs": "## Validating a Token\nTo validate a token, perform a POST operation to the `/oauth/authenticate` endpoint with authorization header `Bearer <token>`\n## Note: This endpoint is not recommended for public access / not supported\n#### Example usage:\n\n    curl -X POST \\\n      'https://api.harver.com/auth/authenticate' \\\n      -H 'Authorization: Bearer eyJhbGciOiJIXzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXIiOnsiaWQiOiI1OWVkZDZhNvU4YzNlNDI3MDZjOWY3NjgifX0sImlhdCI6MTUzMzEzNDk5Mn0.otr7V1XMzF78LrB3oLRKUvT"
+        },
+        {
+          "info": {
+            "name": "Get identity claims for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/oauth/userinfo",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates an access token and returns the associated identity claims (subject, issued-at, expiry, and client identifier). The `client_id` is always extracted from the token itself and is never accepted as request input.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

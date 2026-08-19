@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts scheduling API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "scheduling",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Schedule an interview and retrieve the scheduling link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/scheduling/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Schedule an interview and retrieve the scheduling link"
+        },
+        {
+          "info": {
+            "name": "Returns the details of an Interview",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/scheduling/:accountId/interview-details/:candidateId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "candidateId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Candidate to consider"
+              }
+            ]
+          },
+          "docs": "Returns the details of an Interview"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

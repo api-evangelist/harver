@@ -1,0 +1,2051 @@
+{
+  "item": [
+    {
+      "id": "60e747ad-62e8-4c55-a226-8cfae1acfe73",
+      "name": "applications",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9979d76d-8249-471a-8c2e-b5da37985865",
+          "name": "Returns application ids",
+          "request": {
+            "name": "Returns application ids",
+            "description": {
+              "content": "\nGet harver application ids based on ats-parameters or search by vacancy and email.\n- filter[atsParameters]\nor\n- filter[applicationMeta]\n\n#### Important!!\n\nTo improve the search of applications using atsParameters, the endpoint has been limited to search applications using standardized parameters only. Below is the list of standardized parameters.\n\n- application_id\n- candidate_id\n- country\n- id\n- location\n- source\n- vacancy_id\n\nApart from these, harver provides another 5 customizable standard atsParameters. So the client can do a custom mapping from the client's side and use these standard atsParameters for an application search.\n\n- custom_id_1\n- custom_id_2\n- custom_id_3\n- custom_id_4\n- custom_id_5\n\n#### Example query:\nTo search an application based on atsCandidateId, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/applications?accountId=:accountId&filter[atsParameters][atsCandidateId]=123456789&filter[atsParameters][atdVacancyId]=56254122' \\\n      -H 'Authorization: Bearer ...'\n\nTo search an application based on vacancy and email, you would call the following endpoint:\n\n      curl -X GET \\\n        'https://api.harver.com/api/v1.0/applications?accountId=:accountId&filter[applicationMeta][vacancy]=123456789&filter[applicationMeta][email]=email@test.com' \\\n        -H 'Authorization: Bearer ...'\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "accountId",
+                  "value": "<string>",
+                  "description": "(Required) The account to look for"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "(Required) The filter to apply"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "94161f0f-80df-4613-a902-b5f69739cdf8",
+              "name": "Returns Application ids",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "accountId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"string\",\n      \"id\": \"string\",\n      \"vacancyId\": \"string\"\n    },\n    {\n      \"type\": \"string\",\n      \"id\": \"string\",\n      \"vacancyId\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69b68ce3-4f44-4a5f-af6b-7035ef610e2f",
+          "name": "Returns the details of an Application",
+          "request": {
+            "name": "Returns the details of an Application",
+            "description": {
+              "content": "### IMPORTANT\nAvoid using all the `include` criteria, unless all modules are enabled in your account. Use `include` criteria for the modules activated in your account.\n## Retrieving relationship data\nTo retrieve an Application's relationship data (such as a PDF report, submitted resume etc.), you can make a basic GET `applications/{applicationId}`, while also providing the `include` parameter. This parameter represents 'a list of comma-separated includes', which are to be included in the response.\n#### Supported includes:\n- `vacancy`\n- `report`\n- `cover-letter`\n- `resume`\n- `profile-photo`\n- `matching-results`\n- `video-pitches`\n- `video-interviews`\n- `personal-info`\n- `additional-info`\n- `grading`\n- `ats`\n- `open-questions`\n- `consents`\n- `application-locations`\n- `locations`\n- `availability`\n- `job-functions`\n- `diagnostics`\n- `location-specific-question`\n- `custom-document`\n- `virtual-interviews`\n- `matching-indicators`\n- `account-questions`\n- `personal-information`\n- `sessions`\n- `fraud-flags`\n- `smart-job-navigator`\n- `proctoring`\n#### Proctoring\nThe `proctoring` include returns the candidate's session-monitoring consent status and out-of-focus tab-switch count. It is only present in the response for vacancies that have Proctoring enabled (i.e. where the application contains a proctoring consent record). When consent is declined, `proctoringResults.outOfFocus.count` will be `null`.\n#### Report\nThe report is shown in the GET Application response in the language in which the candidate has completed the flow. To get the content of the report in a specific language (if available), please specify the language in the request header [`Accept-Language`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language). Please note that multiple language preferences are not supported. The language of the response content will be specified in the response header [`Content-Language`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n#### Personal and Additional Info\nWhen personal or additional info modules are included, attributes will have `questions` field as an array of questions, where each question has the following attributes:\n- `questionId(string)`\n- `question(string)`\n- `answer(mixed)`\n- `answerType(string)`\nFor Retail Flow accounts, the personal-info include's module type will be `Vacancy Questions`\n#### Personal Information (New Module)\nTo get data from new personal information module, you need to add the include `personal-information`. Schema example is added in the response samples.\n#### NOTE: `smart-job-navigator` include returns data only when the application status is not `in progress` .\n#### Example query:\nTo fetch an application with the ID `5bd17c67c081252955b19659` and include `matching-results` and `ats` information in the response, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/applications/5bd17c67c081252955b19659?include=matching-results,ats' \\\n      -H 'Authorization: Bearer ...'\n\n#### NOTE: `open-questions` include will be deprecated, please use `open-question` instead.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "The include to apply for relationship data. Use comma separated values for include"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "120e33d4-e92b-4d35-9b9a-00e2828606e8",
+              "name": "Returns the details of the Application",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"type\": \"applications\",\n    \"id\": \"string\",\n    \"attributes\": {\n      \"appliedAt\": 753,\n      \"status\": \"string\",\n      \"matchingScore\": {},\n      \"completedAt\": 5377,\n      \"progress\": {\n        \"all\": 7563,\n        \"completed\": 7339\n      },\n      \"language\": \"ENG\",\n      \"matchingProfile\": {\n        \"bracketId\": \"good\",\n        \"label\": \"Good Fit\"\n      },\n      \"isRejectedByHardQuestion\": false\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"id\": \"string\",\n          \"type\": \"candidates\",\n          \"email\": \"string\",\n          \"attributes\": {\n            \"firstName\": \"string\",\n            \"lastName\": \"string\",\n            \"email\": \"string\"\n          }\n        }\n      },\n      \"vacancy\": {\n        \"data\": {\n          \"type\": \"vacancies\",\n          \"id\": \"string\"\n        }\n      },\n      \"report\": {\n        \"data\": {\n          \"type\": \"reports\",\n          \"id\": \"string\"\n        }\n      },\n      \"fact-sheets\": {\n        \"data\": {\n          \"type\": \"fact-sheets\",\n          \"id\": \"string\"\n        }\n      },\n      \"candidate-detail-page\": {\n        \"data\": {\n          \"type\": \"candidate-detail-page\",\n          \"id\": \"string\"\n        }\n      },\n      \"cover-letter\": {\n        \"data\": {\n          \"type\": \"cover-letters\",\n          \"id\": \"string\"\n        }\n      },\n      \"resume\": {\n        \"data\": {\n          \"type\": \"resumes\",\n          \"id\": \"string\"\n        }\n      },\n      \"profile-photo\": {\n        \"data\": {\n          \"type\": \"profile-photos\",\n          \"id\": \"string\"\n        }\n      },\n      \"custom-document\": {\n        \"data\": {\n          \"type\": \"custom-documents\",\n          \"id\": \"string\"\n        }\n      },\n      \"additional-info\": {\n        \"data\": {\n          \"type\": \"additional-info\",\n          \"id\": \"string\"\n        }\n      },\n      \"personal-info\": {\n        \"data\": {\n          \"type\": \"personal-info\",\n          \"id\": \"string\"\n        }\n      },\n      \"video-interviews\": {\n        \"data\": [\n          {\n            \"type\": \"video-interviews\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"video-interviews\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"video-pitches\": {\n        \"data\": [\n          {\n            \"type\": \"video-pitches\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"video-pitches\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"matching-results\": {\n        \"data\": [\n          {\n            \"type\": \"matching-results\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"matching-results\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"locations\": {\n        \"data\": [\n          {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"consents\": {\n        \"data\": [\n          {\n            \"type\": \"consents\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"consents\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"open-question\": {\n        \"data\": [\n          {\n            \"type\": \"open-question\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"open-question\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"system-diagnostics\": {\n        \"data\": {\n          \"type\": \"system-diagnostics\",\n          \"id\": \"string\"\n        }\n      },\n      \"application-locations\": {\n        \"data\": [\n          {\n            \"type\": \"application-locations\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"application-locations\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"location-specific-question\": {\n        \"data\": [\n          {\n            \"type\": \"location-specific-question\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"location-specific-question\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"availability\": {\n        \"data\": {\n          \"type\": \"availability\",\n          \"id\": \"string\"\n        }\n      },\n      \"virtual-interviews\": {\n        \"data\": [\n          {\n            \"type\": \"virtual-interviews\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"virtual-interviews\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"matching-indicators\": {\n        \"data\": [\n          {\n            \"type\": \"matching-indicators\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"matching-indicators\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"account-questions\": {\n        \"data\": {\n          \"type\": \"account-questions\",\n          \"id\": \"string\"\n        }\n      },\n      \"personal-information\": {\n        \"data\": {\n          \"type\": \"personal-information\",\n          \"id\": \"string\"\n        }\n      },\n      \"account\": {\n        \"data\": {\n          \"type\": \"accounts\",\n          \"id\": \"string\"\n        }\n      }\n    }\n  },\n  \"included\": [\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"location\": \"string\"\n      }\n    },\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"location\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "824b0f77-698a-4520-89ab-22a562a839e2",
+          "name": "Update an Application",
+          "request": {
+            "name": "Update an Application",
+            "description": {},
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attributes\": {\n    \"status\": \"<string>\",\n    \"message\": {\n      \"ENG\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"NL\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"FR\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"DE\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"ES\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"IT\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"en-GB\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"pt-PT\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"sv-SE\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"da-DK\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"nb-NO\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"replyToMail\": \"<string>\",\n      \"ccMailsList\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"rejectionReasonData\": {\n      \"reason\": \"<string>\",\n      \"note\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "966622e9-761a-48d1-b726-1afab6e7df6d",
+              "name": "Application successfully updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributes\": {\n    \"status\": \"<string>\",\n    \"message\": {\n      \"ENG\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"NL\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"FR\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"DE\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"ES\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"IT\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"en-GB\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"pt-PT\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"sv-SE\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"da-DK\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"nb-NO\": {\n        \"mailTitle\": \"<string>\",\n        \"mailBody\": \"<string>\"\n      },\n      \"replyToMail\": \"<string>\",\n      \"ccMailsList\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"rejectionReasonData\": {\n      \"reason\": \"<string>\",\n      \"note\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "34ab4efe-3cbc-4ca6-afc8-6862cb8ea43c",
+          "name": "Delete an application using applicationId",
+          "request": {
+            "name": "Delete an application using applicationId",
+            "description": {
+              "content": "To delete an application, the requesting user should have access to the account and the vacancy which the application resides.\nAlso the user should be an admin in the account to delete the application\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "25950489-6902-4cdb-a325-3fabfd12b098",
+              "name": "Application deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"applicationId\": \"A mongo id\",\n    \"message\": \"Application has been deleted\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ee39486-39f0-4d51-9ee5-817bc81898f5",
+          "name": "Returns the Application Notes",
+          "request": {
+            "name": "Returns the Application Notes",
+            "description": {},
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "notes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "37576a63-1bb6-40b0-8edc-f99b92069ef4",
+              "name": "An array of Notes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"notes\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"body\": \"string\",\n        \"author\": \"string\",\n        \"createdAt\": 7364,\n        \"modifiedAt\": 5739,\n        \"rejectionReason\": \"string\",\n        \"rejectedFor\": \"string\",\n        \"rejectingUser\": \"string\",\n        \"rejectedLocation\": \"string\"\n      }\n    },\n    {\n      \"type\": \"notes\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"body\": \"string\",\n        \"author\": \"string\",\n        \"createdAt\": 5831,\n        \"modifiedAt\": 4148,\n        \"rejectionReason\": \"string\",\n        \"rejectedFor\": \"string\",\n        \"rejectingUser\": \"string\",\n        \"rejectedLocation\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6dbf5c0e-c8aa-40a8-929b-7a16859752c1",
+          "name": "Add a Note to an Application",
+          "request": {
+            "name": "Add a Note to an Application",
+            "description": {},
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "notes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"body\": \"<string>\",\n      \"author\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "11ab4cfe-5d9c-43ac-829b-ec2039cb1297",
+              "name": "Note created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"body\": \"<string>\",\n      \"author\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd4303ca-392b-47f0-a2d8-c448d1e4eb61",
+          "name": "Delete a Note from the Application",
+          "request": {
+            "name": "Delete a Note from the Application",
+            "description": {},
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "notes",
+                ":noteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "noteId",
+                  "description": "(Required) ID of the Note to consider"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e3f3cf1-777f-474a-a0c4-bc19ab42779e",
+              "name": "Note deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "noteId",
+                      "description": "(Required) ID of the Note to consider"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bed5345-e7f3-4f4c-94cd-7e626bc4502f",
+          "name": "Update ats parameters",
+          "request": {
+            "name": "Update ats parameters",
+            "description": {
+              "content": "Endpoint to update the 'ATS Parameters' for a candidate application\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "ats-parameters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"key\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "317ab3e6-cce1-4bca-9652-d85254d0246b",
+              "name": "The ats parameters were updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "ats-parameters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"ats-parameters\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"key\": \"value\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {},\n      \"key_3\": {},\n      \"key_4\": {}\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0358fe1a-5437-4c63-9e6d-396cda8dae72",
+          "name": "Add locations to an application",
+          "request": {
+            "name": "Add locations to an application",
+            "description": {
+              "content": "Endpoint to add locations to a candidate application\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "locations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"locations\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3abf7c72-9e93-42b7-9db6-77345fbf5e9d",
+              "name": "The locations were added to the application successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"application-locations\",\n    \"id\": \"<applicationId>\",\n    \"attributes\": {\n      \"locations\": [\n        \"<locationId>\",\n        \"<locationId>\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "910923a5-b5c8-4993-9f6d-2b82f5da504b",
+          "name": "Update application status per external location",
+          "request": {
+            "name": "Update application status per external location",
+            "description": {
+              "content": "Endpoint to update the 'status' per external location for a candidate application\n\nWhen changing the status to 'HIRED', the job function ID can be sent in the request body (optional attribute).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "locations",
+                "ext-{{externalLocationId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"status\": \"<string>\",\n      \"message\": {\n        \"ENG\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"NL\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"FR\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"DE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"ES\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"IT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"en-GB\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"pt-PT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"sv-SE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"da-DK\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"nb-NO\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"replyToMail\": \"<string>\",\n        \"ccMailsList\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"hiredJobFunctionId\": \"<string>\",\n      \"rejectionReasonData\": {\n        \"reason\": \"<string>\",\n        \"note\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9c304cca-fdd3-4206-b10e-dbc18548850a",
+              "name": "The status per external location was updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "locations",
+                    "ext-{{externalLocationId}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"application-externalLocations\",\n    \"id\": \"<externalLocationId>\",\n    \"attributes\": {\n      \"status\": \"<string>\",\n      \"message\": {\n        \"ENG\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"NL\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"FR\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"DE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"ES\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"IT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"en-GB\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"pt-PT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"sv-SE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"da-DK\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"nb-NO\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"replyToMail\": \"<string>\",\n        \"ccMailsList\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"hiredJobFunctionId\": \"<string>\",\n      \"rejectionReasonData\": {\n        \"reason\": \"<string>\",\n        \"note\": \"<string>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a01a3ff0-e7ad-4c63-a446-93dac75e9162",
+          "name": "Update application status per location",
+          "request": {
+            "name": "Update application status per location",
+            "description": {
+              "content": "Endpoint to update the 'status' per location for a candidate application\n\nWhen changing the status to 'HIRED', the job function ID can be sent in the request body (optional attribute).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "locations",
+                ":locationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "locationId",
+                  "description": "(Required) ID of the Location to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"status\": \"<string>\",\n      \"message\": {\n        \"ENG\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"NL\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"FR\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"DE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"ES\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"IT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"en-GB\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"pt-PT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"sv-SE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"da-DK\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"nb-NO\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"replyToMail\": \"<string>\",\n        \"ccMailsList\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"hiredJobFunctionId\": \"<string>\",\n      \"rejectionReasonData\": {\n        \"reason\": \"<string>\",\n        \"note\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a28a48ab-28fb-48ce-b641-7e79391fee2a",
+              "name": "The status per location was updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "locations",
+                    ":locationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "locationId",
+                      "description": "(Required) ID of the Location to consider"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"application-locations\",\n    \"id\": \"<locationId>\",\n    \"attributes\": {\n      \"status\": \"<string>\",\n      \"message\": {\n        \"ENG\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"NL\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"FR\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"DE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"ES\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"IT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"en-GB\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"pt-PT\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"sv-SE\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"da-DK\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"nb-NO\": {\n          \"mailTitle\": \"<string>\",\n          \"mailBody\": \"<string>\"\n        },\n        \"replyToMail\": \"<string>\",\n        \"ccMailsList\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"hiredJobFunctionId\": \"<string>\",\n      \"rejectionReasonData\": {\n        \"reason\": \"<string>\",\n        \"note\": \"<string>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53f8dd28-ebcb-46ab-b3a6-a5f7350c2101",
+          "name": "Retrieves the re-apply status of a candidate",
+          "request": {
+            "name": "Retrieves the re-apply status of a candidate",
+            "description": {
+              "content": "This endpoint checks whether a candidate is eligible for re-applying. The re-apply status is retrieved using the `applicationId` path parameter. If a candidate is not found, 404 is returned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "reapply",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1cedc964-46d5-4540-be52-8f88a3e78cb2",
+              "name": "Eligible to re-apply or not",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reapply",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"canReapply\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16b2f30a-03f6-434a-89be-3d3334643497",
+              "name": "Candidate not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reapply",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"Not Found\",\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"Candidate cannot be found\"\n    },\n    {\n      \"id\": \"Not Found\",\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"Candidate cannot be found\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81118269-83db-4cb0-9102-33c186b460de",
+          "name": "Retrieves a link to access development report",
+          "request": {
+            "name": "Retrieves a link to access development report",
+            "description": {
+              "content": "This endpoint returns a link to access the development report. The development report can be searched with the `applicationId` and `locale` query parameter.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "reports",
+                "development-reports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "locale",
+                  "value": "<string>",
+                  "description": "(Required) The locales to consider"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b55c4677-84da-46fa-be4c-199ca48ff74a",
+              "name": "Successfully fetched the link to access the file",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "development-reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"link\": \"https://api.harver.com/api/v1.0/public/applications/application-id/reports/development-reports/base-64-encoded-string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65774842-3c7d-4e48-9cc7-243bb0c11f87",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "development-reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    },\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfddbd01-4df9-443e-9b91-208405c30b7b",
+              "name": "When the report cannot be generated or the application cannot be found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "development-reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"Not Found\",\n      \"status\": 404,\n      \"title\": \"Not Found\",\n      \"detail\": \"Cannot generate development report for the given application\"\n    },\n    {\n      \"id\": \"Not Found\",\n      \"status\": 404,\n      \"title\": \"Not Found\",\n      \"detail\": \"Cannot generate development report for the given application\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4be85e34-283b-4cbf-9c49-c31bd96cc1e5",
+              "name": "Any other errors",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "development-reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Internal API error\"\n    },\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Internal API error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "80887ebb-7db3-4404-b170-27dd9536817d",
+          "name": "Retrieves a link to access interview guide",
+          "request": {
+            "name": "Retrieves a link to access interview guide",
+            "description": {
+              "content": "This endpoint returns a link to access the interview guide.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "reports",
+                "interview-guides"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "extendedValidity",
+                  "value": "<boolean>",
+                  "description": "The extended validity to apply. if this is passed 2 months will be set as the validity period for the document"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a5aba75f-508a-4dee-acab-3f1715584804",
+              "name": "Successfully fetched the link to access the file",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "interview-guides"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "extendedValidity",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"link\": \"https://api.harver.com/api/v1.0/public/applications/application-id/reports/interview-guides/base-64-encoded-string?clientId=base-64-encoded-string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df0cf94f-70eb-4d9b-8cce-7361616f4277",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "interview-guides"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "extendedValidity",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    },\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "825d8d46-93eb-493a-bc8d-131a9bad6936",
+              "name": "Any other errors",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "interview-guides"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "extendedValidity",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Error in getting the report\"\n    },\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Error in getting the report\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01990469-f861-4fc6-b1e6-d548a7076c90",
+          "name": "Retrieves a Reports Hub magic link for an application",
+          "request": {
+            "name": "Retrieves a Reports Hub magic link for an application",
+            "description": {
+              "content": "This endpoint generates a magic link to access the Reports Hub for the given application. The link is valid for the specified expiration time and controls whether PII (name, email, phone) is visible.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                ":applicationId",
+                "reports",
+                "reports-hub"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expiresIn",
+                  "value": "<integer>",
+                  "description": "(Required) Link expiration time in seconds. Must be between 2 weeks (1209600) and 1 year (31536000)."
+                },
+                {
+                  "disabled": false,
+                  "key": "allowedPII",
+                  "value": "<boolean>",
+                  "description": "(Required) Controls whether PII (name, email, phone) is visible in the Reports Hub. This value is embedded in the token at issuance time."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "applicationId",
+                  "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c433cf2-186c-412e-bbc3-aa50d86ec243",
+              "name": "Successfully generated the Reports Hub magic link",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "reports-hub"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expiresIn",
+                      "value": "1209600"
+                    },
+                    {
+                      "key": "allowedPII",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"link\": \"https://app.harver.com/reports-hub?token=eyJhbGciOiJIUzI1NiJ9...&lang=en-US\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a1b2ba3-7bb9-4eec-9c95-852b00af4758",
+              "name": "Validation error — missing or invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "reports-hub"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expiresIn",
+                      "value": "1209600"
+                    },
+                    {
+                      "key": "allowedPII",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    },\n    {\n      \"id\": \"ValidationError\",\n      \"status\": 400,\n      \"title\": \"A message thrown by JOI schema validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a247d689-af08-44dd-af2b-001e3a49b0ab",
+              "name": "Invalid or missing API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "reports-hub"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expiresIn",
+                      "value": "1209600"
+                    },
+                    {
+                      "key": "allowedPII",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"Unauthorized\",\n      \"status\": 401,\n      \"title\": \"Unauthorized\"\n    },\n    {\n      \"id\": \"Unauthorized\",\n      \"status\": 401,\n      \"title\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94a47485-ef83-4d54-a3e2-990a286f7d1c",
+              "name": "Application not found or Reports Hub link could not be generated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "reports-hub"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expiresIn",
+                      "value": "1209600"
+                    },
+                    {
+                      "key": "allowedPII",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"Not Found\",\n      \"status\": 404,\n      \"title\": \"Not Found\",\n      \"detail\": \"Cannot generate reports hub link for the given application\"\n    },\n    {\n      \"id\": \"Not Found\",\n      \"status\": 404,\n      \"title\": \"Not Found\",\n      \"detail\": \"Cannot generate reports hub link for the given application\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47101b55-93b9-42c1-abee-a1f84d0a85ef",
+              "name": "Any other errors",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    ":applicationId",
+                    "reports",
+                    "reports-hub"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expiresIn",
+                      "value": "1209600"
+                    },
+                    {
+                      "key": "allowedPII",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "applicationId",
+                      "description": "(Required) ID of the Application to consider ([0-9a-f]{24})"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Internal API error\"\n    },\n    {\n      \"id\": \"InternalServerError\",\n      \"status\": 500,\n      \"title\": \"InternalServerError\",\n      \"detail\": \"Internal API error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.harver.com/api/v1.0/",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) ID of the External Location to consider",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "externalLocationId"
+    }
+  ],
+  "info": {
+    "_postman_id": "3727dbf0-1346-433c-bcc1-ba407eeaa0ca",
+    "name": "Harver Public accounts applications API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API of the Harver Platform available only for the Customers of Harver. <br>\n# Quick Start\n## How to access our environments\nWe provide the API access keys and Account IDs for each standard environment. We suggest using our TEST (harver-test.com) environment during the development phase.\n\nAvailable Harver environments for clients:\n- Test: `https://api.harver-test.com`\n- Production: `https://api.harver.com`\n\n## Authentication\nHarver Public API uses OAuth2 authentication. Once you have obtained an access token (valid for 1 hour) you can use it in the Authentication Header as a “Bearer” token for all following requests.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/oauth/token`\n\n**Note:** <br>\nin TEST env, POST https://api.harver-test.com/oauth/token\n\n**Content-Type:** <br>\napplication/x-www-form-urlencoded\n\n**Body:**\n- grant_type → client_credentials\n- client_id → Provided by Harver\n- client_secret → Provided by Harver\n\nAfter a successful request, the response will contain the “access-token“.\n\n**Example**\n```\ncurl --location --request POST 'https://api.harver-test.com/oauth/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={your_client_id}' \\\n--data-urlencode 'client_secret={your_client_secret}'\n```\n**[detailed documentation](https://api.harver.com/docs#tag/oauth)**\n\n\n## Rate - Limiting\n\nHarver API is guarded by rate-limiting. When the allocated rate-limit is exceeded, the API returns HTTP status code 429. (Too many requests).\n\nIn the Production and Testing environments, the default limits will be 450 and 300 requests per minute, respectively. There are two new rate-limiting headers added to the responses as below.\n\n- **Ratelimit-Limit** – The request limit for the time period\n- **Ratelimit-Reset** - The time remaining in the current window, specified in seconds\n\n## Correlation ID\n\nThe responses now include a new header called `X-Correlation-Id`. When submitting a support request, please include this ID. \n\n## How to create a candidate with an application\nSubmit candidates to Harver in order to invite them to complete the Harver Journey.\n\nHarver can invite the candidate by sending an email to the candidate with a magic link to start the Harver journey\n\nYou can also redirect candidates directly to the magic link from the endpoint’s response. The candidate is then immediately logged into Harver.\n\nThe attributes allow you to pass your custom list of key-value pairs. You can use this to place for example your IDs like “candidate_id“, “requisition_id”, “source” etc to help you link and sync Harver to your system.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications`\n\n**Header:** <br>\nAuthorization: Bearer {access_token}\n\n**Body:**\n```JSON\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"key1\": \"value1\", //Optional key-value pairs\n      \"key2\": \"value2\", //You can retrieve them with the \"ats\" include\n      \"key3\": \"value3\" //with the GET Application request\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"type\": \"candidates\",\n          \"attributes\": {\n            \"emailAddress\": \"candidate@gmail.com\", //Mandatory\n            \"firstName\": \"CandidateFirstName\",  //Mandatory\n            \"lastName\": \"CandidateLastName\" //Mandatory\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n***Response:***\nThe response includes the unique Application ID and a Magic-link for the Candidate.\npayload here\n```\n{\n    \"data\": {\n        \"magicLink\": \"https://my.harver.com/app/landing/{harver_vacancy_id}/magic-link/{unique_code}\",\n        \"applicationId\": \"{harver_application_id}\"\n    }\n}\n```\n\nRepeating this request with the same email address will return the same Application ID with renewed Magic-Link.\n\nIf your account is set to “Magic-link” based authentication for candidates, you can send this link to your candidates or use it to redirect your candidate to Harver. The Magic-link is valid for 1 hour. A ”Magic Link” is kind of an authenticated URL, which you send to the candidate. This helps them to log in to Harver with just one click of the link without entering username & password. It removes all the friction points that might cause the user to drop out of the application process.\n\n**[detailed documentation](https://api.harver.com/docs#tag/candidateApplications)**\n\n***Return_url parameter***\n\nA special attribute can be used when creating a candidate: return_url. That url will be used to redirect the candidate back when they complete the Harver assessment. This way it is possible to add dynamic attributes to that url.\n\n***Example:***\n```\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"return_url\": \"https:/my-ats.com/welcomeback?candidate_id=12345\"\n    },\n  ...\n}\n```\n## Get all information of an application\nTo retrieve an application's relationship data (such as a PDF report, scores etc.), you can make a basic GET applications/{applicationId}, while also providing the include parameter. This include parameter represents a list of comma-separated includes.\n\nEndpoint: <br>\n`GET https://api.harver.com/api/v1.0/applications/{applicationId}`\n\nHeader: <br>\n`Authorization: Bearer {access_token}`\n\nBasic response\n\nThis part is always available, the rest depends on included modules\n```\n\"type\": \"applications\",\n\"id\": \"{harver_application_id}\",\n\"attributes\": {\n    \"appliedAt\": 1630335533,    // timestamp registration\n    \"completedAt\": 1630336749,  // timestamp completed (when completed)\n    \"status\": \"new\",            // status \"new\" means completed Harver assessment, and \"new\" for recruitment\n    \"progress\": {               // Number of modules (incl video & content pages)\n        \"all\": 19,\n        \"completed\": 19\n    },\n    \"matchingScore\": 69,        // Overall Matching Score\n    \"language\": \"ENG\",\n    \"matchingProfile\": {        // Filled when Matching Profile are used in the account\n        \"bracketId\": \"great\",\n        \"label\": \"Green\"\n    }\n},\n\"relationships\": {\n    \"candidate\": {\n        \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"{harver_application_id}\",\n            \"email\": \"{email}\",\n            \"attributes\": {\n                \"firstName\": \"{firstname}\",\n                \"lastName\": \"{lastname}\",\n                \"email\": \"{email}\"\n            }\n        }\n    },\n```\n### Get Application ‘include’ modules\n- `personal-info` & `additional-info` → Candidate personal info and additional questions\n- `ats` → ATS Parameters. These can be your id’s, source parameters, e.g. like a `candidate_id`, `reqId`, `utm_source`\n\n  -- When the candidate is registered using the API: these are the ones that are sent as key-value attributes in creating the candidates\n  -- When the candidate registers directly in Harver: these are the url parameters\n\nExample:\n```\n\"included\": [\n    {\n        \"type\": \"ats-parameters\",\n        \"attributes\": {\n            \"candidate_id\": \"{ats_candidate_id}\",\n            \"job_code\": \"{ats_job_id}\",\n            \"request_id\": \"{ats_request_id}\",\n            \"return_url\": \"https://...\",   // url to return the candidate to when completed Harver\n        }\n    }\n]\n```\n- `report` → A link to:\n  - Harver PDF report. Generated link that will expire in 15 minutes.\n  - Fact Sheet (1 page report). Generated link that will expire in 15 minutes.\n  - Candidate Detail Page. You’ll need to have a Harver account, or SSO enabled, to access the Candidate Detail Page. Will not expire.\n- `matching-results` → detailed scores on the modules\n- `matching-indicators` → detailed info on matching indicators (KMI’s) when configured in the account\n\nExample url: https://api.harver.com/api/v1.0/applications/{application_id}?include=report,cover-letter,resume,matching-results,personal-info,additional-info,ats,matching-indicators\n\n**Scoring & report information**\n- **Overall Matching score:**\n  - Module: always available\n  - Field: `matchingScore`\n  - This is a numerical 0 - 100 score\n- **Score label or Band**\n  - Module: always available if Matching Profiles are configured in Harver Platform.\n  - Field: `\"matchingProfile\"` → `label`.\n  - This is a label or band that can be configured in the Harver Platform based on the score. Typical examples: “Great Fit” / “Good Fit” / “Bad Fit”, “Passed” / “Failed”, “Red” / “Green”\n- **Module scores**\n  - Module: `matching-indicators`\n  - There is a `\"Included\"` → `\"type\": \"matching-indicators\"` for each matching indicator\n- **PDF Report, Factsheet and Candidate result page**\n  - Module: `report`\n  - A direct link to the Candidate’s PDF report and Factsheet.\n  - Note: these links are only available for 15 minutes after requested!\n  - The link to the Candidate detail page is a link to Harver. For this an account at Harver is necessary or SSO needs to be enabled. This link does not expire.\n\n**[detailed documentation](https://api.harver.com/docs#tag/applications/paths/~1applications~1%7BapplicationId%7D/get)**\n\n## Get all candidates and their applications in a vacancy (using the filters)\nTo retrieve a list of the candidates and their applications in a vacancy.\n\nEach candidate has a status. Main statuses:\n- in-progress: Registered, but hasn't completed the application process yet.\n- **new**: Application process completed. It is recommended to filter for this status\n- hired: candidate is hired\n- rejected: candidate is rejected\n\n**Endpoint:** <br>\n`GET https://api.harver.com/api/v1.0/vacancies/{vacancyId}/candidates`\n\n**Header:** <br>\n`Authorization: Bearer {access_token}`\n\n**Useful filter params:**\n\n- filter[status]=new\n- filter[status-updated-at][since]={epoch_timestamp}\n\nYou can combine params like this:\n?filter[status]=new**&**filter[status-updated-at][since]=1582211393\n\nAfter a successful request, the response body will contain the list of (new) Candidates in the Vacancy. Each candidate has an application listed in the “relationships”, this can be used to request the Application Results.\n\nIf you need to periodically query newly finished candidates, we suggest using the “[status-updated-at][since]” filter with the Epoch timestamp of the previous query.\n\nList of possible filters:\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n- `filter[skip_aggregration]`\n\n**[detailed documentation](https://api.harver.com/docs#tag/vacancies/paths/~1vacancies~1%7BvacancyId%7D~1candidates/get)**\n\n## Webhooks from Harver to an ATS\n\nWebhooks allow you to build or set up integrations which subscribe to certain events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured endpoint. The Harver integrations team can configure the webhooks for you.\n\nAvailable events:\n\n- ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n- PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n- AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n- CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n\nWe support NoAuth and Basic Auth (username & password) authentication.\n\nUse the Harver Application Id to get all the details of the application\n\n**[detailed documentation](https://api.harver.com/docs#tag/webhook)**\n# Definitions\n- **Account** - An Account is what holds all of the company specific information within the platform where users of the account can manage settings, Vacancies and Flows.\n- **Vacancy** - Vacancy represents an open position within a company. The Vacancy is where specific information is collected which includes the candidates who wish to apply to that position and their personal information. A Vacancy contains specific information regarding the position for example the location and hours per week the candidate will be expected to work. A vacancy always must have a flow connected to it.\n- **Flow** - A flow is a set of assessment modules and content (videos, static texts), created by an Admin in the system. A Flow must be connected to one or multiple Vacancies.\n- **Modules or Flow modules** - Modules are the separate components used to build a Flow. For instance, a form for the candidate to fill in his/her personal information, a personality questionnaire, multitasking test, etc.\n- **Matching score** - The matching score indicates the extent to which the assessment results of a candidate fit the Vacancy requirements/benchmark. The matching score is calculated based on the combination of results of the different modules that are part of the Flow.\n- **Candidate** - A Candidate represents a person who applied to one or multiple Vacancies.\n- **Application** - A Candidate can apply to multiple Vacancies within an Account. Once a candidate applies to a Vacancy the Application is created.\n- **Webhooks** - Webhooks allow you to build or set up integrations which subscribe to events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured URL.\n\n\nContact Support:\n Name: Harver Support Team\n Email: support@harver.com",
+      "type": "text/plain"
+    }
+  }
+}

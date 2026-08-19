@@ -1,0 +1,179 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts vacancies API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "vacancies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns all Candidates of a Vacancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/candidates",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "The Vacancy filter to apply"
+              }
+            ]
+          },
+          "docs": "To obtain the list of Candidates and their Applications, perform a `GET` operation to the `/vacancies/<vacancy-id>/candidates` endpoint.\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n\nFor filterin"
+        },
+        {
+          "info": {
+            "name": "Returns the module settings of a Vacancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/modules/:moduleId",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              },
+              {
+                "name": "moduleId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Module to consider"
+              }
+            ]
+          },
+          "docs": "Returns the module settings of a Vacancy"
+        },
+        {
+          "info": {
+            "name": "Find vacancy by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ]
+          },
+          "docs": "#### Available [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[skip_aggregation]` - Supports `true` or `false`\n- `include` - Supports combination of `locations`, `regions` and `job-functions` as a comma separated single string. Max length 31\n\nex : locations,job-functions\n\n#### Increasing Performance\n`filter[skip_aggregation]=true` will skip aggregating candidate count in a vacancy, resulting in a faster response\n\n#### Example queries:\nTo get the details of locations ass"
+        },
+        {
+          "info": {
+            "name": "Update a Vacancy Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a Vacancy Status"
+        },
+        {
+          "info": {
+            "name": "Updates locations of a vacancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/locations",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "!!! IMPORTANT - This endpoint will be removed soon. Please use `Updates attached locations of a vacancy` endpoint\nThis endpoint updates the locations of a vacancy. It supports two config option keys to manipulate location update.\n\n- `switchToLocations` - Supports boolean value `true` or `false`. If `true`, will force switching to a vacancy. If there are any regions attached to the vacancy, this will skip the regions check and remove regions and attach locations to the vacancy. Else will check if"
+        },
+        {
+          "info": {
+            "name": "Updates attached locations of a vacancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/locations-v2",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nThis endpoint updates the attached locations of a vacancy. It supports two configs to manipulate location update.\n- `forceOperation` - This option accepts boolean value `true` or `false`. \n\n    -  If set to `true`, it will attach sent locations to the job vacancy, EVEN IF there are already regions attached to it.\n\n    -  If set to `false`, will verify if the job vacancy already has regions attached. If regions are already attached, an error response is sent.\n\n- `replaceValues` - This option acc"
+        },
+        {
+          "info": {
+            "name": "Updates attached regions of a vacancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/vacancies/:vacancyId/regions",
+            "params": [
+              {
+                "name": "vacancyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Vacancy to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nThis endpoint updates the attached regions of a vacancy. It supports two configs to manipulate regions update.\n\n- `forceOperation` - This option accepts boolean value `true` or `false`. \n\n    -  If set to `true`, it will attach sent regions to the job vacancy, EVEN IF there are already locations attached to it.\n\n    -  If set to `false`, will verify if the job vacancy already has locations attached. If locations are already associated, an error response is sent.\n\n- `replaceValues` - This option"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

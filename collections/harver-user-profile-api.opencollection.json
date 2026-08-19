@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts user-profile API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "user-profile",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns the User profile details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/me"
+          },
+          "docs": "This endpoint returns the profile details of the currently authenticated user. No parameters are required; the user is resolved from the access token used in the request.\n"
+        },
+        {
+          "info": {
+            "name": "Manages push notifications of devices",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/me/notifications/devices",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint enables or disables push notifications for one or more of the authenticated user's devices. The `deviceId` is the unique device identifier obtained when registering the device with the push notification provider (for example, the registration token returned by the provider's SDK on the device). The `platform` identifies that push notification provider; currently only `fcm` (Firebase Cloud Messaging) is supported.\n"
+        },
+        {
+          "info": {
+            "name": "Manages push notification types of devices",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/me/notifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manages push notification types of devices"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

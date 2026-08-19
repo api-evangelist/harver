@@ -1,0 +1,523 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns all the available Accounts based on the access rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts"
+          },
+          "docs": "Returns all the available Accounts based on the access rights"
+        },
+        {
+          "info": {
+            "name": "Returns all Candidates of an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/candidates",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "To obtain the list of candidates in an Account, perform a `GET` operation to the `/accounts/<account-id>/candidates` endpoint.\n\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[email]`\n\n#### Example query:\nTo fetch one candidate in account `5ab8845731e881343fa7458c` with the email address `testuser@harver.com`, you would call the following endpoint:\n\n    curl -X GET \\\n      'htt"
+        },
+        {
+          "info": {
+            "name": "Returns all Applications of a Candidate in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/candidates/:candidateId/applications",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "candidateId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the candidate to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Applications of a Candidate in an Account"
+        },
+        {
+          "info": {
+            "name": "Returns all Vacancies of an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/vacancies",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "The Vacancy filter to apply"
+              }
+            ]
+          },
+          "docs": "To obtain the list of Vacancies available for an Account, perform a `GET` operation to the `/accounts/<account-id>/vacancies` endpoint.\nTo get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Please note that multiple language preferences are not supported, content l"
+        },
+        {
+          "info": {
+            "name": "Returns all vacancies of an Account in a specific Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/channels/:channelId/vacancies",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "channelId",
+                "value": "",
+                "type": "path",
+                "description": "string GUID of the Channel to consider"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "The Vacancy filter to apply"
+              }
+            ]
+          },
+          "docs": "## Retrieving relationship data\nTo obtain the list of Vacancies available for a specific Channel, perform a `GET` operation to the `/accounts/<account-id>/channels/<channel-id>/vacancies` endpoint. <br><br> To get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Plea"
+        },
+        {
+          "info": {
+            "name": "Returns all Location specific questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/location-specific-questions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Location specific questions"
+        },
+        {
+          "info": {
+            "name": "Returns all Locations of an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "The location pagination filters to apply"
+              }
+            ]
+          },
+          "docs": "Supports pagination with filter[limit] and filter[offset] parameters. When having these two filter parameters related to pagination, an extra object called 'meta' will be included in the body. This will include the count of all the available locations\n"
+        },
+        {
+          "info": {
+            "name": "Create a Location",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "last_insert",
+                "value": "",
+                "type": "query",
+                "description": "Whether to send the created location or all the locations in the account. When the value is 'true', only the created location is sent"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a location and sends the created location or all the locations in that account\n- `last_insert` : Can be `true` or `false`. When `true`, only the created location is sent. When `false` or the query param is not added, all the locations in the account are sent after creating the location\n"
+        },
+        {
+          "info": {
+            "name": "Return a location by location ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations/:locationId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "locationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Location to consider"
+              }
+            ]
+          },
+          "docs": "Return a location by location ID"
+        },
+        {
+          "info": {
+            "name": "Update a Location",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations/:locationId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "locationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Location to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a Location"
+        },
+        {
+          "info": {
+            "name": "Return a location by external location ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations/ext-:externalLocationId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "externalLocationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the External Location to consider"
+              }
+            ]
+          },
+          "docs": "Return a location by external location ID"
+        },
+        {
+          "info": {
+            "name": "Update a Location based on external location",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/locations/ext-:externalLocationId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "externalLocationId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the External Location to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a Location based on external location"
+        },
+        {
+          "info": {
+            "name": "Returns all Regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/regions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Regions"
+        },
+        {
+          "info": {
+            "name": "Create a new Region in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/regions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Region in an Account"
+        },
+        {
+          "info": {
+            "name": "Update a Region in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/regions/:regionId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Region to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a Region in an Account"
+        },
+        {
+          "info": {
+            "name": "Returns location information and the attributes of a User in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/users/:userProfileId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "userProfileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of userProfile"
+              }
+            ]
+          },
+          "docs": "#### Supported includes:\n- `location`\n- `region`\n\n#### Example query:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/{accountId}/users/{userId}?include=locations,regions' \\\n      -H 'Authorization: Bearer ...'\n"
+        },
+        {
+          "info": {
+            "name": "Returns all Job functions in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/job-functions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Job functions in an Account"
+        },
+        {
+          "info": {
+            "name": "Create a new Job Function in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/job-functions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Job Function in an Account"
+        },
+        {
+          "info": {
+            "name": "Returns all Email Templates in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/email-templates",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Email Templates in an Account"
+        },
+        {
+          "info": {
+            "name": "Returns Job board details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/jobboard",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Vacancy and Location filter"
+              }
+            ]
+          },
+          "docs": "To obtain the list of Job board vacancies and their locations and job-functions details, perform a `GET` operation to the `/accounts/<account-id>/jobboard` endpoint.\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[vacancy]`\n- `filter[language]`\n\nFor filtering by language, comma separated values can be used. Ex: `?filter[language]=<language1>,<language2>`\n#### Example query:\nTo "
+        },
+        {
+          "info": {
+            "name": "Returns all Rejection reasons in an Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/accounts/:accountId/rejectionReasons",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Account to consider"
+              }
+            ]
+          },
+          "docs": "Returns all Rejection reasons in an Account"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

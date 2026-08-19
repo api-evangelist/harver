@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Harver Public accounts candidate-statuses API",
+    "version": "1.37.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "candidate-statuses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns the available candidate statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.harver.com/api/v1.0/candidate-statuses"
+          },
+          "docs": "Returns the available candidate statuses"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

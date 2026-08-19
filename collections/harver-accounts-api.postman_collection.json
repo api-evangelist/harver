@@ -1,0 +1,2234 @@
+{
+  "item": [
+    {
+      "id": "2a0a02b0-5ee3-4c32-ab75-489653b4b383",
+      "name": "accounts",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "15ef6678-fca2-432b-8dc8-a641345e67b6",
+          "name": "Returns all the available Accounts based on the access rights",
+          "request": {
+            "name": "Returns all the available Accounts based on the access rights",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef6085fc-7b48-43bc-b4f3-6f47c3bfea34",
+              "name": "An array of Accounts",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"attributes\": {\n        \"name\": \"string\",\n        \"domain\": \"string\"\n      },\n      \"id\": \"string\",\n      \"relationships\": {\n        \"images\": {\n          \"data\": [\n            {\n              \"meta\": {\n                \"image\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"type\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"removable\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              \"id\": \"string\",\n              \"type\": \"images\"\n            },\n            {\n              \"meta\": {\n                \"image\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"type\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"removable\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              \"id\": \"string\",\n              \"type\": \"images\"\n            }\n          ]\n        },\n        \"configurations\": {\n          \"data\": {\n            \"type\": \"string\",\n            \"attributes\": {\n              \"rejectReasonsEnabled\": false,\n              \"retailFlowEnabled\": false,\n              \"schedulingEnabled\": true\n            }\n          }\n        }\n      },\n      \"type\": \"modules\"\n    },\n    {\n      \"attributes\": {\n        \"name\": \"string\",\n        \"domain\": \"string\"\n      },\n      \"id\": \"string\",\n      \"relationships\": {\n        \"images\": {\n          \"data\": [\n            {\n              \"meta\": {\n                \"image\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"type\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"removable\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              \"id\": \"string\",\n              \"type\": \"images\"\n            },\n            {\n              \"meta\": {\n                \"image\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"type\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"removable\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              \"id\": \"string\",\n              \"type\": \"images\"\n            }\n          ]\n        },\n        \"configurations\": {\n          \"data\": {\n            \"type\": \"string\",\n            \"attributes\": {\n              \"rejectReasonsEnabled\": false,\n              \"retailFlowEnabled\": true,\n              \"schedulingEnabled\": true\n            }\n          }\n        }\n      },\n      \"type\": \"applications\"\n    }\n  ],\n  \"meta\": {\n    \"count\": 6631\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24413c63-a48d-4357-b3c8-d6cd3b1e6f87",
+          "name": "Returns all Candidates of an Account",
+          "request": {
+            "name": "Returns all Candidates of an Account",
+            "description": {
+              "content": "To obtain the list of candidates in an Account, perform a `GET` operation to the `/accounts/<account-id>/candidates` endpoint.\n\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[email]`\n\n#### Example query:\nTo fetch one candidate in account `5ab8845731e881343fa7458c` with the email address `testuser@harver.com`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/candidates?filter[email]=testuser@harver.com' \\\n      -H 'Authorization: Bearer ...'\n\n#### NOTE: If there are no candidates or a candidate is not found when filter by email is used, an empty data array will be returned.      \n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "candidates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f63e02e4-c9ed-40e4-92e6-7d171879dbeb",
+              "name": "An array of Candidates",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "candidates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"candidates\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"emailAddress\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"address\": \"string\",\n        \"registeredAt\": 6864\n      }\n    },\n    {\n      \"type\": \"candidates\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"emailAddress\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"address\": \"string\",\n        \"registeredAt\": 831\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b99340a-0a47-4c9b-97b8-819ebe51b826",
+          "name": "Returns all Applications of a Candidate in an Account",
+          "request": {
+            "name": "Returns all Applications of a Candidate in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "candidates",
+                ":candidateId",
+                "applications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "candidateId",
+                  "description": "(Required) ID of the candidate to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88378990-d109-4324-9bd9-ff79ad751a58",
+              "name": "An array of Applications",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "candidates",
+                    ":candidateId",
+                    "applications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "candidateId",
+                      "description": "(Required) ID of the candidate to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"applications\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"appliedAt\": 4055,\n        \"matchingScore\": 40.28894649406014,\n        \"status\": \"hired\"\n      },\n      \"relationships\": {\n        \"candidate\": {\n          \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"applications\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"appliedAt\": 4486,\n        \"matchingScore\": 3.138623293598952,\n        \"status\": \"invited\"\n      },\n      \"relationships\": {\n        \"candidate\": {\n          \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd8f4bbc-d228-4c2e-9269-8a7b577922cf",
+          "name": "Returns all Vacancies of an Account",
+          "request": {
+            "name": "Returns all Vacancies of an Account",
+            "description": {
+              "content": "To obtain the list of Vacancies available for an Account, perform a `GET` operation to the `/accounts/<account-id>/vacancies` endpoint.\nTo get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Please note that multiple language preferences are not supported, content language will be defined by the first language on the list. <br> The language of the response content will be specified in the response header `Content-Language`. More info about [Content-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[status]`\n- `filter[locations]`\n- `filter[regions]`\n- `filter[external_location_id]`\n- `filter[skip_aggregation]`\n\nFor filtering by locations, regions and external location ID, comma separated values can be used. Ex: `?filter[locations]={ID1},{ID2}`\n#### Example query:\nTo fetch all vacancies of account `5ab8845731e881343fa7458c` that have vacancies in status `draft`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/vacancies?filter[status]=draft' \\\n      -H 'Accept-Language: en' \\\n      -H 'Authorization: Bearer ...'\nTo fetch all vacancies of account `5ab8845731e881343fa7458c` that have vacancies in status `draft`, location ID `5c484fdece609b10529e1e3f`  and in language `nl`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/vacancies?filter[status]=draft&filter[locations]=5c484fdece609b10529e1e3f' \\\n      -H 'Accept-Language: nl' \\\n      -H 'Authorization: Bearer ...'\n\n#### Increasing Performance\n`filter[skip_aggregation]=true` will skip aggregating candidate count in a vacancy, resulting in a faster response\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "vacancies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "locations",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "regions",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "external_location_id",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "skip_aggregation",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Language to localize resource (if not provided, default to en)",
+                "key": "Accept-Language",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d7fcdea0-ae97-44e8-870c-4cc9dbfd58f3",
+              "name": "An array of Vacancies",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "vacancies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "regions",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_location_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip_aggregation",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Language to localize resource (if not provided, default to en)",
+                    "key": "Accept-Language",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"location\": \"string\",\n        \"createdAt\": 2579,\n        \"applicationUrl\": \"string\"\n      },\n      \"meta\": {\n        \"candidates-per-status\": {\n          \"new\": 7620,\n          \"in-progress\": 3684,\n          \"rejected\": 5150,\n          \"invited\": 6703,\n          \"talent-pool\": 4812,\n          \"hired\": 8457,\n          \"shortlisted\": 7084,\n          \"contract\": 6049\n        }\n      }\n    },\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"location\": \"string\",\n        \"createdAt\": 3320,\n        \"applicationUrl\": \"string\"\n      },\n      \"meta\": {\n        \"candidates-per-status\": {\n          \"new\": 2533,\n          \"in-progress\": 7201,\n          \"rejected\": 8611,\n          \"invited\": 8356,\n          \"talent-pool\": 5690,\n          \"hired\": 8881,\n          \"shortlisted\": 6526,\n          \"contract\": 3694\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 9094\n  },\n  \"relationships\": {\n    \"locations\": {\n      \"data\": [\n        {\n          \"type\": \"locations\",\n          \"id\": \"string\",\n          \"attributes\": {\n            \"name\": \"string\",\n            \"externalLocationId\": \"string\",\n            \"jobFunctions\": [\n              \"string\",\n              \"string\"\n            ]\n          }\n        },\n        {\n          \"type\": \"locations\",\n          \"id\": \"string\",\n          \"attributes\": {\n            \"name\": \"string\",\n            \"externalLocationId\": \"string\",\n            \"jobFunctions\": [\n              \"string\",\n              \"string\"\n            ]\n          }\n        }\n      ]\n    },\n    \"regions\": {\n      \"data\": [\n        {\n          \"type\": \"regions\",\n          \"id\": \"string\"\n        },\n        {\n          \"type\": \"regions\",\n          \"id\": \"string\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c3d310ce-21ba-4562-9a58-e11b48b11b3e",
+          "name": "Returns all vacancies of an Account in a specific Channel",
+          "request": {
+            "name": "Returns all vacancies of an Account in a specific Channel",
+            "description": {
+              "content": "## Retrieving relationship data\nTo obtain the list of Vacancies available for a specific Channel, perform a `GET` operation to the `/accounts/<account-id>/channels/<channel-id>/vacancies` endpoint. <br><br> To get the content in a specific language (if available), specify the language in the request header `Accept-Language`. More info about [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) and [locales](http://www.localeplanet.com/icu/iso639.html). Please note that multiple language preferences are not supported, content language will be defined by the first language on the list. <br> The language of the response content will be specified in the response header `Content-Language`. More info about [Content-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language).\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[status]`\n\n#### Example query:\nTo fetch all vacancies of an Account in a specific Channel and in language `nl`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/{accountId}/channels/{channelName}/vacancies' \\\n      -H 'Accept-Language: nl' \\\n      -H 'Authorization: Bearer ...'\n\nTo fetch all open Vacancies of the account `5ab8845731e881343fa7458c`, available for publishing in a specific channel in English (en), you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/5ab8845731e881343fa7458c/channels/{channelName}/vacancies?filter[status]=open' \\\n      -H 'Accept-Language: en' \\\n      -H 'Authorization: Bearer ...'\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "channels",
+                ":channelId",
+                "vacancies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "The Vacancy filter to apply"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "channelId",
+                  "description": "(Required) string GUID of the Channel to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Language to localize resource (if not provided, default to en)",
+                "key": "Accept-Language",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1072da11-16ec-4180-a554-72413a771baa",
+              "name": "An array of Vacancies",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "channels",
+                    ":channelId",
+                    "vacancies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "channelId",
+                      "description": "(Required) string GUID of the Channel to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Language to localize resource (if not provided, default to en)",
+                    "key": "Accept-Language",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"location\": \"string\",\n        \"createdAt\": 2751,\n        \"applicationUrl\": \"string\"\n      },\n      \"meta\": {\n        \"candidates-per-status\": {\n          \"new\": 4198,\n          \"in-progress\": 3807,\n          \"rejected\": 8881,\n          \"invited\": 1539,\n          \"talent-pool\": 4709,\n          \"hired\": 911,\n          \"shortlisted\": 4620,\n          \"contract\": 2818\n        },\n        \"customAttributes\": {\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"Region\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Organization\": [\n            \"string\",\n            \"string\"\n          ],\n          \"City\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Location\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Department\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Hours per week\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Contract type\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      }\n    },\n    {\n      \"type\": \"vacancies\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"location\": \"string\",\n        \"createdAt\": 6877,\n        \"applicationUrl\": \"string\"\n      },\n      \"meta\": {\n        \"candidates-per-status\": {\n          \"new\": 2968,\n          \"in-progress\": 7610,\n          \"rejected\": 3342,\n          \"invited\": 2608,\n          \"talent-pool\": 2497,\n          \"hired\": 1135,\n          \"shortlisted\": 1227,\n          \"contract\": 6795\n        },\n        \"customAttributes\": {\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"Region\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Organization\": [\n            \"string\",\n            \"string\"\n          ],\n          \"City\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Location\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Department\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Hours per week\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Contract type\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 3840\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6372863b-ea1b-4367-aa29-cabbff6bbc0b",
+          "name": "Returns all Location specific questions",
+          "request": {
+            "name": "Returns all Location specific questions",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "location-specific-questions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b78a478-a0b1-4c19-9f4e-71af82f40182",
+              "name": "List of Location specific questions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "location-specific-questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"location-specific-questions\",\n      \"attributes\": {\n        \"text\": \"string\"\n      },\n      \"relationships\": {\n        \"vacancy\": {\n          \"data\": {\n            \"type\": \"string\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"location-specific-questions\",\n      \"attributes\": {\n        \"text\": \"string\"\n      },\n      \"relationships\": {\n        \"vacancy\": {\n          \"data\": {\n            \"type\": \"string\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aee53c59-b0e7-4424-a380-545ea361abe9",
+          "name": "Returns all Locations of an Account",
+          "request": {
+            "name": "Returns all Locations of an Account",
+            "description": {
+              "content": "Supports pagination with filter[limit] and filter[offset] parameters. When having these two filter parameters related to pagination, an extra object called 'meta' will be included in the body. This will include the count of all the available locations\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<string>",
+                  "description": "The location pagination filters to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "The location pagination filters to apply"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c9bb5d93-6226-46d9-874f-dc32f8f4e269",
+              "name": "An array of Locations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 1846,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 3652,\n            \"to\": 9133\n          },\n          {\n            \"from\": 2081,\n            \"to\": 5112\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"open\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 5083,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 6682,\n            \"to\": 571\n          },\n          {\n            \"from\": 2010,\n            \"to\": 229\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"open\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"open\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 1619\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "942a304d-94bd-4060-95cd-a1b485198636",
+          "name": "Create a Location",
+          "request": {
+            "name": "Create a Location",
+            "description": {
+              "content": "Creates a location and sends the created location or all the locations in that account\n- `last_insert` : Can be `true` or `false`. When `true`, only the created location is sent. When `false` or the query param is not added, all the locations in the account are sent after creating the location\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "last_insert",
+                  "value": "<string>",
+                  "description": "Whether to send the created location or all the locations in the account. When the value is 'true', only the created location is sent"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"externalId\": \"<string>\",\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68e437e2-f747-4ea5-985d-82f8304a56e0",
+              "name": "Created location or all the locations\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_insert",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"externalId\": \"<string>\",\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"regions\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 611,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 5369,\n            \"to\": 8271\n          },\n          {\n            \"from\": 4068,\n            \"to\": 2540\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 4174,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 8199,\n            \"to\": 3468\n          },\n          {\n            \"from\": 2066,\n            \"to\": 7128\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cffcc9aa-0a40-43d0-8354-9f0a1a0b85fa",
+          "name": "Return a location by location ID",
+          "request": {
+            "name": "Return a location by location ID",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations",
+                ":locationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "locationId",
+                  "description": "(Required) ID of the Location to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e81aa7a-809b-4905-b8a5-530f34298755",
+              "name": "The requested location",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations",
+                    ":locationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "locationId",
+                      "description": "(Required) ID of the Location to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 611,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 5369,\n            \"to\": 8271\n          },\n          {\n            \"from\": 4068,\n            \"to\": 2540\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 4174,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 8199,\n            \"to\": 3468\n          },\n          {\n            \"from\": 2066,\n            \"to\": 7128\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f145689f-e701-4389-adc5-022094ad0eb4",
+          "name": "Update a Location",
+          "request": {
+            "name": "Update a Location",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations",
+                ":locationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "locationId",
+                  "description": "(Required) ID of the Location to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d091133-a5df-41e9-b231-1100350e45e5",
+              "name": "The updated Location",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations",
+                    ":locationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "locationId",
+                      "description": "(Required) ID of the Location to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"regions\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 611,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 5369,\n            \"to\": 8271\n          },\n          {\n            \"from\": 4068,\n            \"to\": 2540\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 4174,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 8199,\n            \"to\": 3468\n          },\n          {\n            \"from\": 2066,\n            \"to\": 7128\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6f4f64d9-9b77-49b0-af09-7f4619190137",
+          "name": "Return a location by external location ID",
+          "request": {
+            "name": "Return a location by external location ID",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations",
+                "ext-{{externalLocationId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dd6aae8c-2070-4df8-b206-49262aa0d8c7",
+              "name": "The requested location",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations",
+                    "ext-{{externalLocationId}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 611,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 5369,\n            \"to\": 8271\n          },\n          {\n            \"from\": 4068,\n            \"to\": 2540\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"externalId\": \"string\",\n        \"hiringChance\": 4174,\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\"\n        },\n        \"email\": \"string\",\n        \"walkInTimems\": [\n          {\n            \"from\": 8199,\n            \"to\": 3468\n          },\n          {\n            \"from\": 2066,\n            \"to\": 7128\n          }\n        ],\n        \"isActive\": true\n      },\n      \"relationships\": {\n        \"region\": {\n          \"data\": {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        },\n        \"job-functions\": {\n          \"data\": [\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            },\n            {\n              \"type\": \"job-functions\",\n              \"id\": \"string\",\n              \"attributes\": {\n                \"status\": \"closed\"\n              }\n            }\n          ]\n        },\n        \"location-specific-questions\": {\n          \"data\": [\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            },\n            {\n              \"type\": \"location-specific-questions\",\n              \"id\": \"string\",\n              \"language\": \"string\",\n              \"attributes\": {\n                \"question\": \"string\",\n                \"vacancy\": \"string\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a0d16a5-be1c-4555-8660-6d8dd379a258",
+          "name": "Update a Location based on external location",
+          "request": {
+            "name": "Update a Location based on external location",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "locations",
+                "ext-{{externalLocationId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "82ec0959-14c9-4b41-b724-626ccf60481a",
+              "name": "Location updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "locations",
+                    "ext-{{externalLocationId}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"address\": \"<string>\",\n      \"email\": \"<string>\",\n      \"hiringChance\": \"<integer>\",\n      \"walkInTimes\": [\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        },\n        {\n          \"from\": \"<long>\",\n          \"to\": \"<long>\",\n          \"date\": {\n            \"day\": \"<number>\",\n            \"month\": \"<number>\",\n            \"year\": \"<number>\"\n          }\n        }\n      ],\n      \"addressDetails\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"street\": \"<string>\",\n        \"streetNumber\": \"<string>\"\n      },\n      \"isActive\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"region\": {\n        \"data\": {\n          \"type\": \"regions\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"job-functions\": {\n        \"data\": [\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"job-functions\",\n            \"id\": \"<string>\",\n            \"attributes\": {\n              \"status\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"location-specific-questions\": {\n        \"data\": [\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          },\n          {\n            \"type\": \"location-specific-questions\",\n            \"id\": \"<string>\",\n            \"language\": \"<string>\",\n            \"attributes\": {\n              \"question\": \"<string>\",\n              \"vacancy\": \"<string>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3e0eb9b-04ae-43e1-a82d-e309e0265bda",
+          "name": "Returns all Regions",
+          "request": {
+            "name": "Returns all Regions",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b8efd1e-d864-4519-921f-1a5f80337131",
+              "name": "List of Regions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"regions\",\n      \"attributes\": {\n        \"name\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"regions\",\n      \"attributes\": {\n        \"name\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07465238-6a50-499e-a5f7-67133a26b23c",
+          "name": "Create a new Region in an Account",
+          "request": {
+            "name": "Create a new Region in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5c4d6483-04d6-4a72-a0ce-713f566ae5b5",
+              "name": "The created Region's name and ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"type\": \"regions\",\n    \"id\": \"string\",\n    \"attributes\": {\n      \"name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14ab74a4-2610-4669-a9df-12357110cedb",
+          "name": "Update a Region in an Account",
+          "request": {
+            "name": "Update a Region in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "regions",
+                ":regionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "regionId",
+                  "description": "(Required) ID of the Region to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df5577ea-d796-4f74-9b8c-b34a768bdd81",
+              "name": "The updated Region's name and ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "regions",
+                    ":regionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) ID of the Region to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"type\": \"regions\",\n    \"id\": \"string\",\n    \"attributes\": {\n      \"name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8ac83a43-1995-4b9f-96db-018061b6b139",
+          "name": "Returns location information and the attributes of a User in an Account",
+          "request": {
+            "name": "Returns location information and the attributes of a User in an Account",
+            "description": {
+              "content": "#### Supported includes:\n- `location`\n- `region`\n\n#### Example query:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/{accountId}/users/{userId}?include=locations,regions' \\\n      -H 'Authorization: Bearer ...'\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "users",
+                ":userProfileId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userProfileId",
+                  "description": "(Required) ID of userProfile"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8252fbbe-9909-4c07-b587-b5e3770f2468",
+              "name": "An object of Account user information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "users",
+                    ":userProfileId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userProfileId",
+                      "description": "(Required) ID of userProfile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"string\",\n    \"type\": \"account-users\",\n    \"attributes\": {\n      \"role\": \"super-user\",\n      \"candidatesPiiAllowed\": false,\n      \"createdAt\": 7459\n    },\n    \"relationships\": {\n      \"account\": {\n        \"data\": {\n          \"type\": \"accounts\",\n          \"id\": \"string\"\n        }\n      },\n      \"locations\": {\n        \"data\": [\n          {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          }\n        ]\n      },\n      \"regions\": {\n        \"data\": [\n          {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          },\n          {\n            \"type\": \"regions\",\n            \"id\": \"string\"\n          }\n        ]\n      }\n    }\n  },\n  \"included\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"email\": \"string\",\n        \"hiringChance\": 2945,\n        \"walkInTimems\": [\n          {\n            \"from\": 2060,\n            \"to\": 340\n          },\n          {\n            \"from\": 9127,\n            \"to\": 1751\n          }\n        ]\n      },\n      \"relationships\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"locations\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"email\": \"string\",\n        \"hiringChance\": 311,\n        \"walkInTimems\": [\n          {\n            \"from\": 4896,\n            \"to\": 2675\n          },\n          {\n            \"from\": 1455,\n            \"to\": 9358\n          }\n        ]\n      },\n      \"relationships\": 2248.3941565939313\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e146e9ec-c2b6-4e8d-9cf6-cf5612e3c317",
+          "name": "Returns all Job functions in an Account",
+          "request": {
+            "name": "Returns all Job functions in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "job-functions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "349f23d3-62b8-48f1-8af8-d803a282b34a",
+              "name": "An array of Job functions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "job-functions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"job-functions\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"minAge\": 2214\n      }\n    },\n    {\n      \"type\": \"job-functions\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"minAge\": 3736\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c9d2545-e1d9-4341-aee5-ea079323aeef",
+          "name": "Create a new Job Function in an Account",
+          "request": {
+            "name": "Create a new Job Function in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "job-functions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"minAge\": \"<number>\",\n      \"image\": {\n        \"key\": \"<string>\",\n        \"placeHolder\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5868003c-e468-4f17-8805-e60d2c1b7b6c",
+              "name": "The created Job Function's name and ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "job-functions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"minAge\": \"<number>\",\n      \"image\": {\n        \"key\": \"<string>\",\n        \"placeHolder\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"type\": \"job-functions\",\n    \"id\": \"string\",\n    \"attributes\": {\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"minAge\": 3858.254905077315\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e4edd459-6987-4a56-831b-4e2882197534",
+          "name": "Returns all Email Templates in an Account",
+          "request": {
+            "name": "Returns all Email Templates in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "email-templates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1a5a8e50-1032-464d-b521-c3abb0a44113",
+              "name": "An array of email templates",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "email-templates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"email-templates\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"status\": \"NEW\",\n        \"template\": {\n          \"IT\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"ES\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"DE\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"FR\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"NL\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"ENG\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"email-templates\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"status\": \"NEW\",\n        \"template\": {\n          \"IT\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"ES\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"DE\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"FR\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"NL\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          },\n          \"ENG\": {\n            \"content\": \"string\",\n            \"subject\": \"string\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e46c3002-3592-471a-91e3-14f9bba80d5d",
+          "name": "Returns Job board details",
+          "request": {
+            "name": "Returns Job board details",
+            "description": {
+              "content": "To obtain the list of Job board vacancies and their locations and job-functions details, perform a `GET` operation to the `/accounts/<account-id>/jobboard` endpoint.\n### Limiting results\nOptionally, to limit the scope of the results, you can use the following [query parameters](https://en.wikipedia.org/wiki/Query_string):\n- `filter[vacancy]`\n- `filter[language]`\n\nFor filtering by language, comma separated values can be used. Ex: `?filter[language]=<language1>,<language2>`\n#### Example query:\nTo fetch all job board vacancies of account `<testAccountId>`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>` and filter by language `ENG`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>&filter[language]=EN' \\\n      -H 'Authorization: Bearer ...'\nTo fetch a specific vacancy of the job board in account `<testAccountId>` and filter by language `ENG` and `NL`, you would call the following endpoint:\n\n    curl -X GET \\\n      'https://api.harver.com/api/v1.0/accounts/<testAccountId>/jobboard?filter[vacancy]=<testVacancyId>&filter[language]=ENG,NL' \\\n      -H 'Authorization: Bearer ...'\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "jobboard"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "vacancy",
+                  "value": "<string>",
+                  "description": "Vacancy and Location filter"
+                },
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "<string>",
+                  "description": "Vacancy and Location filter"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5e58e003-29ec-4561-a8cd-900080d0ff98",
+              "name": "Vacancies in job board",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "jobboard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vacancy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"jobboard\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"language\": \"ENG\",\n        \"link\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\"\n      },\n      \"relationships\": {\n        \"location\": {\n          \"data\": {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          }\n        },\n        \"jobFunction\": {\n          \"data\": {\n            \"type\": \"job-functions\",\n            \"id\": \"string\"\n          }\n        },\n        \"vacancy\": {\n          \"data\": {\n            \"type\": \"vacancies\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"jobboard\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"language\": \"ENG\",\n        \"link\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\"\n      },\n      \"relationships\": {\n        \"location\": {\n          \"data\": {\n            \"type\": \"locations\",\n            \"id\": \"string\"\n          }\n        },\n        \"jobFunction\": {\n          \"data\": {\n            \"type\": \"job-functions\",\n            \"id\": \"string\"\n          }\n        },\n        \"vacancy\": {\n          \"data\": {\n            \"type\": \"vacancies\",\n            \"id\": \"string\"\n          }\n        }\n      }\n    }\n  ],\n  \"included\": [\n    {\n      \"type\": \"locations\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\"\n        },\n        \"externalId\": \"string\",\n        \"title\": \"string\"\n      }\n    },\n    {\n      \"type\": \"locations\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\",\n        \"address\": \"string\",\n        \"addressDetails\": {\n          \"country\": \"string\",\n          \"state\": \"string\",\n          \"postalCode\": \"string\",\n          \"city\": \"string\",\n          \"street\": \"string\",\n          \"streetNumber\": \"string\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\"\n        },\n        \"externalId\": \"string\",\n        \"title\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2cfceb33-ff9e-4412-829a-e45c506b86a4",
+          "name": "Returns all Rejection reasons in an Account",
+          "request": {
+            "name": "Returns all Rejection reasons in an Account",
+            "description": {},
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "rejectionReasons"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) ID of the Account to consider"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e9261b44-3f78-4e7e-9849-d728c1203aff",
+              "name": "An array of rejection reasons",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "rejectionReasons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) ID of the Account to consider"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"rejection-reasons\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\"\n      }\n    },\n    {\n      \"type\": \"rejection-reasons\",\n      \"id\": \"string\",\n      \"attributes\": {\n        \"name\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.harver.com/api/v1.0/",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) ID of the External Location to consider",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "externalLocationId"
+    }
+  ],
+  "info": {
+    "_postman_id": "c2fb75df-b956-4d0b-890a-4ed6ca4f0766",
+    "name": "Harver Public accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API of the Harver Platform available only for the Customers of Harver. <br>\n# Quick Start\n## How to access our environments\nWe provide the API access keys and Account IDs for each standard environment. We suggest using our TEST (harver-test.com) environment during the development phase.\n\nAvailable Harver environments for clients:\n- Test: `https://api.harver-test.com`\n- Production: `https://api.harver.com`\n\n## Authentication\nHarver Public API uses OAuth2 authentication. Once you have obtained an access token (valid for 1 hour) you can use it in the Authentication Header as a “Bearer” token for all following requests.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/oauth/token`\n\n**Note:** <br>\nin TEST env, POST https://api.harver-test.com/oauth/token\n\n**Content-Type:** <br>\napplication/x-www-form-urlencoded\n\n**Body:**\n- grant_type → client_credentials\n- client_id → Provided by Harver\n- client_secret → Provided by Harver\n\nAfter a successful request, the response will contain the “access-token“.\n\n**Example**\n```\ncurl --location --request POST 'https://api.harver-test.com/oauth/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={your_client_id}' \\\n--data-urlencode 'client_secret={your_client_secret}'\n```\n**[detailed documentation](https://api.harver.com/docs#tag/oauth)**\n\n\n## Rate - Limiting\n\nHarver API is guarded by rate-limiting. When the allocated rate-limit is exceeded, the API returns HTTP status code 429. (Too many requests).\n\nIn the Production and Testing environments, the default limits will be 450 and 300 requests per minute, respectively. There are two new rate-limiting headers added to the responses as below.\n\n- **Ratelimit-Limit** – The request limit for the time period\n- **Ratelimit-Reset** - The time remaining in the current window, specified in seconds\n\n## Correlation ID\n\nThe responses now include a new header called `X-Correlation-Id`. When submitting a support request, please include this ID. \n\n## How to create a candidate with an application\nSubmit candidates to Harver in order to invite them to complete the Harver Journey.\n\nHarver can invite the candidate by sending an email to the candidate with a magic link to start the Harver journey\n\nYou can also redirect candidates directly to the magic link from the endpoint’s response. The candidate is then immediately logged into Harver.\n\nThe attributes allow you to pass your custom list of key-value pairs. You can use this to place for example your IDs like “candidate_id“, “requisition_id”, “source” etc to help you link and sync Harver to your system.\n\n**Endpoint:** <br>\n`POST https://api.harver.com/api/v1.0/vacancies/:vacancyId/applications`\n\n**Header:** <br>\nAuthorization: Bearer {access_token}\n\n**Body:**\n```JSON\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"key1\": \"value1\", //Optional key-value pairs\n      \"key2\": \"value2\", //You can retrieve them with the \"ats\" include\n      \"key3\": \"value3\" //with the GET Application request\n    },\n    \"relationships\": {\n      \"candidate\": {\n        \"data\": {\n          \"type\": \"candidates\",\n          \"attributes\": {\n            \"emailAddress\": \"candidate@gmail.com\", //Mandatory\n            \"firstName\": \"CandidateFirstName\",  //Mandatory\n            \"lastName\": \"CandidateLastName\" //Mandatory\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n***Response:***\nThe response includes the unique Application ID and a Magic-link for the Candidate.\npayload here\n```\n{\n    \"data\": {\n        \"magicLink\": \"https://my.harver.com/app/landing/{harver_vacancy_id}/magic-link/{unique_code}\",\n        \"applicationId\": \"{harver_application_id}\"\n    }\n}\n```\n\nRepeating this request with the same email address will return the same Application ID with renewed Magic-Link.\n\nIf your account is set to “Magic-link” based authentication for candidates, you can send this link to your candidates or use it to redirect your candidate to Harver. The Magic-link is valid for 1 hour. A ”Magic Link” is kind of an authenticated URL, which you send to the candidate. This helps them to log in to Harver with just one click of the link without entering username & password. It removes all the friction points that might cause the user to drop out of the application process.\n\n**[detailed documentation](https://api.harver.com/docs#tag/candidateApplications)**\n\n***Return_url parameter***\n\nA special attribute can be used when creating a candidate: return_url. That url will be used to redirect the candidate back when they complete the Harver assessment. This way it is possible to add dynamic attributes to that url.\n\n***Example:***\n```\n{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"return_url\": \"https:/my-ats.com/welcomeback?candidate_id=12345\"\n    },\n  ...\n}\n```\n## Get all information of an application\nTo retrieve an application's relationship data (such as a PDF report, scores etc.), you can make a basic GET applications/{applicationId}, while also providing the include parameter. This include parameter represents a list of comma-separated includes.\n\nEndpoint: <br>\n`GET https://api.harver.com/api/v1.0/applications/{applicationId}`\n\nHeader: <br>\n`Authorization: Bearer {access_token}`\n\nBasic response\n\nThis part is always available, the rest depends on included modules\n```\n\"type\": \"applications\",\n\"id\": \"{harver_application_id}\",\n\"attributes\": {\n    \"appliedAt\": 1630335533,    // timestamp registration\n    \"completedAt\": 1630336749,  // timestamp completed (when completed)\n    \"status\": \"new\",            // status \"new\" means completed Harver assessment, and \"new\" for recruitment\n    \"progress\": {               // Number of modules (incl video & content pages)\n        \"all\": 19,\n        \"completed\": 19\n    },\n    \"matchingScore\": 69,        // Overall Matching Score\n    \"language\": \"ENG\",\n    \"matchingProfile\": {        // Filled when Matching Profile are used in the account\n        \"bracketId\": \"great\",\n        \"label\": \"Green\"\n    }\n},\n\"relationships\": {\n    \"candidate\": {\n        \"data\": {\n            \"type\": \"candidates\",\n            \"id\": \"{harver_application_id}\",\n            \"email\": \"{email}\",\n            \"attributes\": {\n                \"firstName\": \"{firstname}\",\n                \"lastName\": \"{lastname}\",\n                \"email\": \"{email}\"\n            }\n        }\n    },\n```\n### Get Application ‘include’ modules\n- `personal-info` & `additional-info` → Candidate personal info and additional questions\n- `ats` → ATS Parameters. These can be your id’s, source parameters, e.g. like a `candidate_id`, `reqId`, `utm_source`\n\n  -- When the candidate is registered using the API: these are the ones that are sent as key-value attributes in creating the candidates\n  -- When the candidate registers directly in Harver: these are the url parameters\n\nExample:\n```\n\"included\": [\n    {\n        \"type\": \"ats-parameters\",\n        \"attributes\": {\n            \"candidate_id\": \"{ats_candidate_id}\",\n            \"job_code\": \"{ats_job_id}\",\n            \"request_id\": \"{ats_request_id}\",\n            \"return_url\": \"https://...\",   // url to return the candidate to when completed Harver\n        }\n    }\n]\n```\n- `report` → A link to:\n  - Harver PDF report. Generated link that will expire in 15 minutes.\n  - Fact Sheet (1 page report). Generated link that will expire in 15 minutes.\n  - Candidate Detail Page. You’ll need to have a Harver account, or SSO enabled, to access the Candidate Detail Page. Will not expire.\n- `matching-results` → detailed scores on the modules\n- `matching-indicators` → detailed info on matching indicators (KMI’s) when configured in the account\n\nExample url: https://api.harver.com/api/v1.0/applications/{application_id}?include=report,cover-letter,resume,matching-results,personal-info,additional-info,ats,matching-indicators\n\n**Scoring & report information**\n- **Overall Matching score:**\n  - Module: always available\n  - Field: `matchingScore`\n  - This is a numerical 0 - 100 score\n- **Score label or Band**\n  - Module: always available if Matching Profiles are configured in Harver Platform.\n  - Field: `\"matchingProfile\"` → `label`.\n  - This is a label or band that can be configured in the Harver Platform based on the score. Typical examples: “Great Fit” / “Good Fit” / “Bad Fit”, “Passed” / “Failed”, “Red” / “Green”\n- **Module scores**\n  - Module: `matching-indicators`\n  - There is a `\"Included\"` → `\"type\": \"matching-indicators\"` for each matching indicator\n- **PDF Report, Factsheet and Candidate result page**\n  - Module: `report`\n  - A direct link to the Candidate’s PDF report and Factsheet.\n  - Note: these links are only available for 15 minutes after requested!\n  - The link to the Candidate detail page is a link to Harver. For this an account at Harver is necessary or SSO needs to be enabled. This link does not expire.\n\n**[detailed documentation](https://api.harver.com/docs#tag/applications/paths/~1applications~1%7BapplicationId%7D/get)**\n\n## Get all candidates and their applications in a vacancy (using the filters)\nTo retrieve a list of the candidates and their applications in a vacancy.\n\nEach candidate has a status. Main statuses:\n- in-progress: Registered, but hasn't completed the application process yet.\n- **new**: Application process completed. It is recommended to filter for this status\n- hired: candidate is hired\n- rejected: candidate is rejected\n\n**Endpoint:** <br>\n`GET https://api.harver.com/api/v1.0/vacancies/{vacancyId}/candidates`\n\n**Header:** <br>\n`Authorization: Bearer {access_token}`\n\n**Useful filter params:**\n\n- filter[status]=new\n- filter[status-updated-at][since]={epoch_timestamp}\n\nYou can combine params like this:\n?filter[status]=new**&**filter[status-updated-at][since]=1582211393\n\nAfter a successful request, the response body will contain the list of (new) Candidates in the Vacancy. Each candidate has an application listed in the “relationships”, this can be used to request the Application Results.\n\nIf you need to periodically query newly finished candidates, we suggest using the “[status-updated-at][since]” filter with the Epoch timestamp of the previous query.\n\nList of possible filters:\n- `filter[status]`\n- `filter[status-updated-at][since]`\n- `filter[status-updated-at][until]`\n- `filter[locations]`\n- `filter[region]`\n- `filter[external_location_id]`\n- `filter[job_function]`\n- `filter[skip_aggregration]`\n\n**[detailed documentation](https://api.harver.com/docs#tag/vacancies/paths/~1vacancies~1%7BvacancyId%7D~1candidates/get)**\n\n## Webhooks from Harver to an ATS\n\nWebhooks allow you to build or set up integrations which subscribe to certain events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured endpoint. The Harver integrations team can configure the webhooks for you.\n\nAvailable events:\n\n- ApplicationStarted - A candidate registered at Harver. (Candidate Status: in-progress)\n- PersonalInfoWasCreated - A candidate filled in the “Personal information” module. (Candidate Status: in-progress)\n- AdditionalInfoWasUpdated - A candidate filled in the “Additional information” module. (Candidate Status: in-progress)\n- CandidateStatusNew - A candidate completed the Harver Journey. (Candidate Status = new)\n\nWe support NoAuth and Basic Auth (username & password) authentication.\n\nUse the Harver Application Id to get all the details of the application\n\n**[detailed documentation](https://api.harver.com/docs#tag/webhook)**\n# Definitions\n- **Account** - An Account is what holds all of the company specific information within the platform where users of the account can manage settings, Vacancies and Flows.\n- **Vacancy** - Vacancy represents an open position within a company. The Vacancy is where specific information is collected which includes the candidates who wish to apply to that position and their personal information. A Vacancy contains specific information regarding the position for example the location and hours per week the candidate will be expected to work. A vacancy always must have a flow connected to it.\n- **Flow** - A flow is a set of assessment modules and content (videos, static texts), created by an Admin in the system. A Flow must be connected to one or multiple Vacancies.\n- **Modules or Flow modules** - Modules are the separate components used to build a Flow. For instance, a form for the candidate to fill in his/her personal information, a personality questionnaire, multitasking test, etc.\n- **Matching score** - The matching score indicates the extent to which the assessment results of a candidate fit the Vacancy requirements/benchmark. The matching score is calculated based on the combination of results of the different modules that are part of the Flow.\n- **Candidate** - A Candidate represents a person who applied to one or multiple Vacancies.\n- **Application** - A Candidate can apply to multiple Vacancies within an Account. Once a candidate applies to a Vacancy the Application is created.\n- **Webhooks** - Webhooks allow you to build or set up integrations which subscribe to events in Harver. When one of those events is triggered, we’ll send an HTTP POST payload to the webhook’s configured URL.\n\n\nContact Support:\n Name: Harver Support Team\n Email: support@harver.com",
+      "type": "text/plain"
+    }
+  }
+}
