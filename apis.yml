@@ -54,6 +54,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Account
+  tags_raw:
   - accounts
   properties:
   - type: OpenAPI
@@ -68,6 +70,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Application
+  tags_raw:
   - applications
   properties:
   - type: OpenAPI
@@ -95,7 +99,8 @@ apis:
   description: The candidateApplications API from Harver — 1 operation(s) for candidateapplications.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
-  tags:
+  tags: []
+  tags_raw:
   - candidateApplications
   properties:
   - type: OpenAPI
@@ -110,6 +115,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
@@ -124,6 +131,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Scheduling
+  tags_raw:
   - scheduling
   properties:
   - type: OpenAPI
@@ -138,6 +147,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - User Profile
+  tags_raw:
   - user-profile
   properties:
   - type: OpenAPI
@@ -152,6 +163,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Vacancies
+  tags_raw:
   - vacancies
   properties:
   - type: OpenAPI
@@ -166,6 +179,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Webhook
+  tags_raw:
   - webhook
   properties:
   - type: OpenAPI
