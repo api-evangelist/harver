@@ -142,7 +142,7 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
-  - scheduling
+  - Scheduling
   tags_raw:
   - scheduling
   properties:
@@ -158,7 +158,7 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
-  - user-profile
+  - User Profile
   tags_raw:
   - user-profile
   properties:
@@ -174,7 +174,7 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
-  - vacancies
+  - Vacancies
   tags_raw:
   - vacancies
   properties:
