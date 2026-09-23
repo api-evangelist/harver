@@ -1,0 +1,27 @@
+# Front Door AI Index — harver — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: harver
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: harver.com
+  final_host: harver.com
+  ownership: own
+  owner: harver
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 5
+  host_score: 5
+  density: 4.11
+  words: 1218
+  tiers:
+    agentic: 0
+    core: 5
+    model: 0
+  ambiguous: 11
+  top_terms:
+    predictive: 8
+    AI: 5
+    automation: 3
