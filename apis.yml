@@ -69,7 +69,7 @@ maintainers:
   email: info@apis.io
 apis:
 - aid: harver:harver-accounts-api
-  name: Harver accounts API
+  name: Harver Accounts API
   description: The accounts API from Harver — 16 operation(s) for accounts.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -85,7 +85,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-applications-api
-  name: Harver applications API
+  name: Harver Applications API
   description: The applications API from Harver — 12 operation(s) for applications.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -101,7 +101,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-candidate-statuses-api
-  name: Harver candidate-statuses API
+  name: Harver Candidate Statuses API
   description: The candidate-statuses API from Harver — 1 operation(s) for candidate-statuses.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -115,7 +115,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-candidateapplications-api
-  name: Harver candidateApplications API
+  name: Harver Candidate Applications API
   description: The candidateApplications API from Harver — 1 operation(s) for candidateapplications.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -130,7 +130,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-scheduling-api
-  name: Harver scheduling API
+  name: Harver Scheduling API
   description: The scheduling API from Harver — 2 operation(s) for scheduling.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -146,7 +146,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-user-profile-api
-  name: Harver user-profile API
+  name: Harver User Profile API
   description: The user-profile API from Harver — 3 operation(s) for user-profile.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -162,7 +162,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-vacancies-api
-  name: Harver vacancies API
+  name: Harver Vacancies API
   description: The vacancies API from Harver — 6 operation(s) for vacancies.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
@@ -178,7 +178,7 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 - aid: harver:harver-webhook-api
-  name: Harver webhook API
+  name: Harver Webhook API
   description: The webhook API from Harver — 1 operation(s) for webhook.
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/

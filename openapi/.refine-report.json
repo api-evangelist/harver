@@ -14,9 +14,7 @@
     "harver-vacancies-api-openapi.yml",
     "harver-webhook-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -31,15 +29,14 @@
     "harver-openapi-original.json: declared missing tag: user-profile",
     "harver-openapi-original.json: declared missing tag: vacancies",
     "harver-openapi-original.json: declared missing tag: webhook",
-    "superseded outputs removed: harver-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 9 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "harver-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-applications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-candidate-statuses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-candidateapplications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "harver-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "harver-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-scheduling-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-user-profile-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "harver-vacancies-api-openapi.yml: previously refined output, superseded by openapi/_original/",

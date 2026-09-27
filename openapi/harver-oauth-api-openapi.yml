@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   version: 1.37.0
-  title: Harver Public OAUTH API
+  title: Harver Public OAuth API
   description: Public API of the Harver Platform available only for the Customers of Harver.
   contact:
     name: Harver Support Team
