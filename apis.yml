@@ -210,6 +210,9 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 common:
+- type: CapabilityMap
+  url: capabilities/harver-capability-edges.yml
+  name: Harver Business Capability Map
 - type: Website
   url: https://harver.com/
 - type: Documentation

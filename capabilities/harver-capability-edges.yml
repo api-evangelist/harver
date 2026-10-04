@@ -1,0 +1,66 @@
+slug: harver
+provider: Harver
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 6
+edges:
+- tag: Applications
+  spec_file: harver-applications-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.92
+  evidence: '"Returns the details of an Application"; "Update application status per location"; "Retrieves
+    the re-apply status of a candidate"'
+  reason: Job application lifecycle management within a hiring platform — talent acquisition.
+- tag: Scheduling
+  spec_file: harver-scheduling-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.9
+  evidence: '"Schedule an interview and retrieve the scheduling link"'
+  reason: Interview scheduling is part of the recruiting/hiring process.
+- tag: Vacancies
+  spec_file: harver-vacancies-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.9
+  evidence: '"Find vacancy by id"; "Update a Vacancy Status"; "Returns all Candidates of a Vacancy"'
+  reason: Vacancy (job requisition) management and its candidates — core talent acquisition.
+- tag: candidateApplications
+  spec_file: harver-candidateapplications-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.9
+  evidence: POST /vacancies/{vacancyId}/applications  "Create a Candidate and Application in an Account"
+  reason: Candidate submission against a vacancy — recruiting intake.
+- tag: Accounts
+  spec_file: harver-accounts-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.75
+  evidence: '"Returns all Candidates of an Account"; "Returns all Vacancies of an Account"'
+  reason: Account-scoped access to candidates, applications and vacancies on a pre-employment assessment
+    platform — recruiting domain, though the tag itself is a tenant/account container.
+- tag: candidate-statuses
+  spec_file: harver-candidate-statuses-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.7
+  evidence: GET /candidate-statuses  "Returns the available candidate statuses"
+  reason: Reference lookup of candidate pipeline statuses in a hiring platform; thin but unambiguously
+    recruiting-domain.
