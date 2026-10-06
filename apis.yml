@@ -42,7 +42,7 @@ accessModel:
 image: https://harver.com/wp-content/uploads/2026/01/harver-lp-brand-V2-1.jpg
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-10-06'
 tags:
 - Company
 - Human Resources
@@ -210,6 +210,10 @@ apis:
   - type: APIReference
     url: https://api.harver.com/docs
 common:
+- url: https://harver.com/newsroom/
+  type: Blog
+- url: https://harver.com/feed/
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/harver-capability-edges.yml
   name: Harver Business Capability Map
