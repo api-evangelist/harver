@@ -106,6 +106,8 @@ apis:
   humanURL: https://api.harver.com/docs
   baseURL: https://api.harver.com/api/v1.0/
   tags:
+  - Candidatestatuses
+  tags_raw:
   - candidate-statuses
   properties:
   - type: OpenAPI
