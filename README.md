@@ -64,6 +64,141 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Harver is a company surfaced as a portfolio company of insight-partners and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Harver is a Talent Intelligence platform for pre-employment assessment, automated interview scheduling and reference checking that helps organizations make data-driven, less-biased hiring decisions at scale. Harver's Public API (OpenAPI 3.0, v1.37.0) is available to Harver customers and lets ATS and HR systems submit candidates, create applications and magic-links, retrieve matching scores, module results and report links, manage vacancies, locations, regions and job functions, and subscribe to candidate-lifecycle webhooks. Authentication is OAuth2 client_credentials; resources use a JSON:API-style envelope, responses are rate-limited (Ratelimit-Limit/Reset, 429) and carry an X-Correlation-Id. Harver was surfaced as an Insight Partners portfolio company.
 
-Backed by: insight-partners — https://harver.com/
+**Areas:** Company · Human Resources · Recruiting · Hiring · Talent Intelligence · Pre-Employment Assessment · Candidate Experience · Applicant Tracking
+
+## Harver on APIs.io
+
+Everything profiled for Harver is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/harver/](https://apis.io/providers/harver/)** — or go straight to one of the APIs or properties below.
+
+### APIs (9)
+
+- [Harver Accounts API](https://apis.io/apis/harver/harver-accounts-api/) — The accounts API from Harver — 16 operation(s) for accounts.
+- [Harver Applications API](https://apis.io/apis/harver/harver-applications-api/) — The applications API from Harver — 12 operation(s) for applications.
+- [Harver Candidate Statuses API](https://apis.io/apis/harver/harver-candidate-statuses-api/) — The candidate-statuses API from Harver — 1 operation(s) for candidate-statuses.
+- [Harver Candidate Applications API](https://apis.io/apis/harver/harver-candidateapplications-api/) — The candidateApplications API from Harver — 1 operation(s) for candidateapplications.
+- [Harver Scheduling API](https://apis.io/apis/harver/harver-scheduling-api/) — The scheduling API from Harver — 2 operation(s) for scheduling.
+- [Harver User Profile API](https://apis.io/apis/harver/harver-user-profile-api/) — The user-profile API from Harver — 3 operation(s) for user-profile.
+- [Harver Vacancies API](https://apis.io/apis/harver/harver-vacancies-api/) — The vacancies API from Harver — 6 operation(s) for vacancies.
+- [Harver Webhook API](https://apis.io/apis/harver/harver-webhook-api/) — The webhook API from Harver — 1 operation(s) for webhook.
+- [Harver OAUTH API](https://apis.io/apis/harver/harver-oauth-api/) — The oauth API from Harver — 3 operation(s) for oauth.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Harver Webhooks](https://apis.io/asyncapis/harver/harver-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [harver](https://apis.io/servers/harver/harver/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Harver Agentic Access](https://apis.io/agentic-access/harver/harver-agentic-access/)
+
+#### Collections (9)
+
+Postman and Open Collection request collections.
+
+- [Harver Public accounts API](https://apis.io/collections/harver/open-harver-accounts-api/)
+- [Harver Public accounts applications API](https://apis.io/collections/harver/open-harver-applications-api/)
+- [Harver Public accounts candidate-statuses API](https://apis.io/collections/harver/open-harver-candidate-statuses-api/)
+- [Harver Public accounts candidateApplications API](https://apis.io/collections/harver/open-harver-candidateapplications-api/)
+- [Harver Public accounts oauth API](https://apis.io/collections/harver/open-harver-oauth-api/)
+- [Harver Public accounts scheduling API](https://apis.io/collections/harver/open-harver-scheduling-api/)
+- [Harver Public accounts user-profile API](https://apis.io/collections/harver/open-harver-user-profile-api/)
+- [Harver Public accounts vacancies API](https://apis.io/collections/harver/open-harver-vacancies-api/)
+- [Harver Public accounts webhook API](https://apis.io/collections/harver/open-harver-webhook-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Harver Overlay](https://apis.io/overlays/harver/harver-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Harver Authentication](https://apis.io/security/harver/harver-authentication/)
+- [Harver Domain Security](https://apis.io/security/harver/harver-domain-security/)
+- [Harver Vulnerability Disclosure](https://apis.io/security/harver/harver-vulnerability-disclosure/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://harver.com/)
+- [Documentation](https://api.harver.com/docs)
+- [API reference](https://api.harver.com/docs)
+- [Support](https://knowledge.harver.com/hc/en-us)
+- [Blog](https://harver.com/newsroom/)
+- [Security](https://harver.com/.well-known/security.txt)
+- [Compliance](https://harver.com/security/)
+- [Privacy policy](https://harver.com/privacy-policy/)
+- [GitHub](https://github.com/harver-engineering)
+
+## API Evangelist rating
+
+**Kin Score 41.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 51.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 21.1 |
+| Developer ergonomics | 43.5 |
+| Access clarity | 14.5 |
+
+**Agent readiness 28.7** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 28.9** — Employment & Payroll
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/harver/](https://apis.io/providers/harver/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Harver: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/harver/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
